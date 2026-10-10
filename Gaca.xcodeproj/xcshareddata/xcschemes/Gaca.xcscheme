@@ -35,6 +35,20 @@
                ReferencedContainer = "container:Gaca.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2997A26D81FE96E5461CFCAE"
+               BuildableName = "GacaUITests.xctest"
+               BlueprintName = "GacaUITests"
+               ReferencedContainer = "container:Gaca.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "0A375806208A553A127716DA"
                BuildableName = "GacaTests.xctest"
                BlueprintName = "GacaTests"
+               ReferencedContainer = "container:Gaca.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2997A26D81FE96E5461CFCAE"
+               BuildableName = "GacaUITests.xctest"
+               BlueprintName = "GacaUITests"
                ReferencedContainer = "container:Gaca.xcodeproj">
             </BuildableReference>
          </TestableReference>

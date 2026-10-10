@@ -17,7 +17,13 @@ final class SettingsStore: @unchecked Sendable {
     }
 
     var apiBaseString: String {
-        get { defaults.string(forKey: key) ?? Self.bundledDefault }
+        get {
+            #if DEBUG
+            // UI tests point the app at a throwaway local API.
+            if let override = ProcessInfo.processInfo.environment["GACA_API_BASE"] { return Self.normalize(override) }
+            #endif
+            return defaults.string(forKey: key) ?? Self.bundledDefault
+        }
         set { defaults.set(Self.normalize(newValue), forKey: key) }
     }
 

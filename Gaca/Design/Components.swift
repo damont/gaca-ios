@@ -166,4 +166,11 @@ enum RelativeTime {
         if s < 7 * 86400 { return "\(Int(s / 86400))d" }
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
+
+    /// "just now", "5m ago", … for a sentence.
+    static func ago(_ date: Date, now: Date = .now) -> String {
+        let s = short(date, now: now)
+        if s == "now" { return "just now" }
+        return s.last?.isNumber == false && s.first?.isNumber == true ? "\(s) ago" : s
+    }
 }

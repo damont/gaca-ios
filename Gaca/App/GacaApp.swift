@@ -8,6 +8,11 @@ struct GacaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @State private var model = AppModel()
 
+    init() {
+        let slate = UIColor(Palette.accent)
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: slate]
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -32,6 +37,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["GACA_UITEST_RESET"] != nil { return true }
+        #endif
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
             guard granted else { return }
             DispatchQueue.main.async { application.registerForRemoteNotifications() }

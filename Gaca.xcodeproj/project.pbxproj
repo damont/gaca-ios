@@ -13,6 +13,7 @@
 		322BEC2136DAFCCCAA1A1EFC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354AA773A44C1C71DDDBDBBF /* Theme.swift */; };
 		34E97168608C6D74FB202851 /* AlertDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3903BFC79EB45D6A3527B444 /* AlertDetailView.swift */; };
 		3550E11E2EEA74B2813DD39C /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9C9059FAEC605D80C5AB70 /* MarkdownUI */; };
+		3C8979813509EB223896C075 /* FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC988CB45D09C858F04AF360 /* FlowTests.swift */; };
 		54A21B9B9A9EE62582741094 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF9CB0B49BA86E5602E307D /* LoginView.swift */; };
 		5C4253309DC1C96FAA7DA4D4 /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8075C5FB07D02F4661DCB5 /* EventStream.swift */; };
 		6151978BE2EE1AE9C923F1D3 /* ArtifactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495704264C324B8AB0AA717 /* ArtifactsView.swift */; };
@@ -47,6 +48,13 @@
 			remoteGlobalIDString = C37F59B231443183F3D9D8A4;
 			remoteInfo = Gaca;
 		};
+		ECFE9670B01CF162662334FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0CDED05C0FC7C06E680DCBA2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C37F59B231443183F3D9D8A4;
+			remoteInfo = Gaca;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +78,7 @@
 		726E274535B5E73C12974AFF /* ChatThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatThreadView.swift; sourceTree = "<group>"; };
 		7517EBD87335A3B321FA3E8B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8954873348CD3F6D308DC1A8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		940CFDA5D6E06FDEA917C937 /* GacaUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GacaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		946EBF2AE08E89A19B60EB1C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		992F137B01151D89FB4F5173 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		9ED1D24BA0242A7D72544B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -81,6 +90,7 @@
 		D48EC7C1B7B248424F52294E /* ArtifactViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtifactViewer.swift; sourceTree = "<group>"; };
 		DA8075C5FB07D02F4661DCB5 /* EventStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
 		E7E816870C80477F6B523E1A /* Gaca.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gaca.entitlements; sourceTree = "<group>"; };
+		EC988CB45D09C858F04AF360 /* FlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowTests.swift; sourceTree = "<group>"; };
 		F2B740CFD4238FA3B2A7E792 /* GacaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GacaApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -176,6 +186,7 @@
 			children = (
 				BBE0411AEBE000DA22C614C9 /* Gaca.app */,
 				4E66ADB371460BAB108F89DA /* GacaTests.xctest */,
+				940CFDA5D6E06FDEA917C937 /* GacaUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,6 +223,14 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
+		CD5000CC13C1F3393380FBC7 /* GacaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				EC988CB45D09C858F04AF360 /* FlowTests.swift */,
+			);
+			path = GacaUITests;
+			sourceTree = "<group>";
+		};
 		CF5104B40AAC04ABE1A544D5 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +260,7 @@
 			children = (
 				86A2FCEEB871E1C0CC5E849E /* Gaca */,
 				666E1BA408BCAB11442F6E64 /* GacaTests */,
+				CD5000CC13C1F3393380FBC7 /* GacaUITests */,
 				8BEFF53DCCF3BC51BF49BA1B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -284,6 +304,24 @@
 			productReference = 4E66ADB371460BAB108F89DA /* GacaTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		2997A26D81FE96E5461CFCAE /* GacaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C24A9136F83FA0DB43916EDE /* Build configuration list for PBXNativeTarget "GacaUITests" */;
+			buildPhases = (
+				6B7CCAC5B60F7971C139FF07 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A50A9318B676E37196D5B1FE /* PBXTargetDependency */,
+			);
+			name = GacaUITests;
+			packageProductDependencies = (
+			);
+			productName = GacaUITests;
+			productReference = 940CFDA5D6E06FDEA917C937 /* GacaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		C37F59B231443183F3D9D8A4 /* Gaca */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A358F9D10B6BC6068325CD9 /* Build configuration list for PBXNativeTarget "Gaca" */;
@@ -317,6 +355,10 @@
 					0A375806208A553A127716DA = {
 						DevelopmentTeam = "";
 					};
+					2997A26D81FE96E5461CFCAE = {
+						DevelopmentTeam = "";
+						TestTargetID = C37F59B231443183F3D9D8A4;
+					};
 					C37F59B231443183F3D9D8A4 = {
 						DevelopmentTeam = "";
 					};
@@ -342,6 +384,7 @@
 			targets = (
 				C37F59B231443183F3D9D8A4 /* Gaca */,
 				0A375806208A553A127716DA /* GacaTests */,
+				2997A26D81FE96E5461CFCAE /* GacaUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -391,6 +434,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6B7CCAC5B60F7971C139FF07 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C8979813509EB223896C075 /* FlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		98AEF0189A7DD24CDA335215 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -407,9 +458,31 @@
 			target = C37F59B231443183F3D9D8A4 /* Gaca */;
 			targetProxy = A16AC1BCF9EE5864A243BF5B /* PBXContainerItemProxy */;
 		};
+		A50A9318B676E37196D5B1FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C37F59B231443183F3D9D8A4 /* Gaca */;
+			targetProxy = ECFE9670B01CF162662334FA /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		16E85A96051952CFA2440046 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gaca;
+			};
+			name = Debug;
+		};
 		17ADFFC91AE0D42278D480D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -504,6 +577,23 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gaca.app/Gaca";
 			};
 			name = Debug;
+		};
+		7BD3D0487753C9233B6ACACA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gaca;
+			};
+			name = Release;
 		};
 		9E4D3475EF7D172B276052DE /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -624,6 +714,15 @@
 			buildConfigurations = (
 				783A87063A2361255AB62D1E /* Debug */,
 				D7C7C15E8F6B9F13743E730B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C24A9136F83FA0DB43916EDE /* Build configuration list for PBXNativeTarget "GacaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16E85A96051952CFA2440046 /* Debug */,
+				7BD3D0487753C9233B6ACACA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

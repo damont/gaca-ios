@@ -69,7 +69,7 @@ struct AlertDetailView: View {
                     Text(alert.title)
                         .font(.system(size: 26, weight: .bold))
                         .foregroundStyle(Palette.textPrimary)
-                    Text("from \(alert.source) · \(RelativeTime.short(alert.createdAt)) ago")
+                    Text("from \(alert.source) · \(RelativeTime.ago(alert.createdAt))")
                         .font(.system(size: 14))
                         .foregroundStyle(Palette.textSecondary)
                 }

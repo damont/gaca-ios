@@ -56,6 +56,9 @@ final class AppModel {
 
     init(api: APIClient) {
         self.api = api
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["GACA_UITEST_RESET"] != nil { api.tokens.set(nil) }
+        #endif
         api.onUnauthorized = { [weak self] in
             Task { @MainActor in self?.signOutLocally() }
         }

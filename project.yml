@@ -63,6 +63,10 @@ targets:
             CFBundleURLSchemes:
               - gaca
         GacaDefaultAPIBase: $(GACA_DEFAULT_API_BASE)
+        # Lets Settings point at a dev box on the LAN (plain http) — public internet
+        # traffic still has to be https.
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.monts.gaca
@@ -85,12 +89,27 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: dev.monts.gaca.tests
 
+  GacaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: GacaUITests
+    dependencies:
+      - target: Gaca
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: dev.monts.gaca.uitests
+        TEST_TARGET_NAME: Gaca
+
 schemes:
   Gaca:
     build:
       targets:
         Gaca: all
         GacaTests: [test]
+        GacaUITests: [test]
     test:
       targets:
         - GacaTests
+        - GacaUITests
