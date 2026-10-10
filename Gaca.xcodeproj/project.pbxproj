@@ -1,0 +1,675 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		060F6288BB834D2F95113A3F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EBD87335A3B321FA3E8B /* SettingsView.swift */; };
+		179DCCC06186F99B7D9A1019 /* SkillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D0BFB13B2E80CB5792F6F9 /* SkillsView.swift */; };
+		22C8EF961DEE943A3E8CC9B5 /* Composer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274924E7CADE2866232453D /* Composer.swift */; };
+		322BEC2136DAFCCCAA1A1EFC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354AA773A44C1C71DDDBDBBF /* Theme.swift */; };
+		34E97168608C6D74FB202851 /* AlertDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3903BFC79EB45D6A3527B444 /* AlertDetailView.swift */; };
+		3550E11E2EEA74B2813DD39C /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9E9C9059FAEC605D80C5AB70 /* MarkdownUI */; };
+		54A21B9B9A9EE62582741094 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF9CB0B49BA86E5602E307D /* LoginView.swift */; };
+		5C4253309DC1C96FAA7DA4D4 /* EventStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8075C5FB07D02F4661DCB5 /* EventStream.swift */; };
+		6151978BE2EE1AE9C923F1D3 /* ArtifactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495704264C324B8AB0AA717 /* ArtifactsView.swift */; };
+		645EAA2A8AE0BEF3BB4432B1 /* Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C11193D52282DEB0D53A459 /* Stores.swift */; };
+		64C6712E9E88C7B77CC13EB1 /* ChatHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C8BA38E0CD49DB761ADF1 /* ChatHomeView.swift */; };
+		6A393D7D9398F0D8AB7F6309 /* GacaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7378043CA90ED511C05CD /* GacaAPI.swift */; };
+		6E52079437D327CED69506A9 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113BC4620A92C62A1CEB2D29 /* TodayView.swift */; };
+		849DD4659C477EBDAE3023F5 /* ChatThreadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137A466092A9DCC9D508ED91 /* ChatThreadModel.swift */; };
+		8914A75C11F872C8D560FB2E /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F137B01151D89FB4F5173 /* InboxView.swift */; };
+		8DAF3995256BEC3E73BFB9C6 /* CrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1AB6C6085E3E151641449 /* CrewDetailView.swift */; };
+		909485D7ED134562DA94CC45 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 4D2BE60080B97B8F46753DBB /* GoogleSignIn */; };
+		93F7D4E6678502889E6DC7E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ED1D24BA0242A7D72544B71 /* Assets.xcassets */; };
+		9526C8E31B27ED58049BF379 /* ChatHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A8799AF6FE544237F72D34 /* ChatHistoryView.swift */; };
+		96272FEB9BE0F55CAFD8333D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A357BBC8558FB96FAF8C071 /* APIClient.swift */; };
+		98E291857E9C6974952497C1 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15814B6FF1EA73DC5C909350 /* AppModel.swift */; };
+		9BEFAE9A0B80050EA05BF0A7 /* AddCrewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */; };
+		A166C8ECAEA361E5D2FB91E5 /* ChatThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726E274535B5E73C12974AFF /* ChatThreadView.swift */; };
+		B218187B2BA83E792D3795DF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A11879DA6029BD3D1B0B2D /* Components.swift */; };
+		D2C845211CD70553292CFB25 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946EBF2AE08E89A19B60EB1C /* RootView.swift */; };
+		DA45ED3F781B69D6148A53DC /* NewDelegationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A68F000471991E342988683 /* NewDelegationSheet.swift */; };
+		DD3631D67A4A17EC6985868E /* GacaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B740CFD4238FA3B2A7E792 /* GacaApp.swift */; };
+		E1FC82E43F4638ACFEFD2E1B /* ArtifactViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48EC7C1B7B248424F52294E /* ArtifactViewer.swift */; };
+		E45CF0AB04576948F479291C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8954873348CD3F6D308DC1A8 /* Models.swift */; };
+		F46D49001ABB3DA7BA815C3C /* WireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586475DCFEA7128F7A01243E /* WireTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A16AC1BCF9EE5864A243BF5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0CDED05C0FC7C06E680DCBA2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C37F59B231443183F3D9D8A4;
+			remoteInfo = Gaca;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02D0BFB13B2E80CB5792F6F9 /* SkillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsView.swift; sourceTree = "<group>"; };
+		087C8BA38E0CD49DB761ADF1 /* ChatHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHomeView.swift; sourceTree = "<group>"; };
+		113BC4620A92C62A1CEB2D29 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		137A466092A9DCC9D508ED91 /* ChatThreadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatThreadModel.swift; sourceTree = "<group>"; };
+		1495704264C324B8AB0AA717 /* ArtifactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtifactsView.swift; sourceTree = "<group>"; };
+		15814B6FF1EA73DC5C909350 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		1C11193D52282DEB0D53A459 /* Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stores.swift; sourceTree = "<group>"; };
+		23C47AC53E351CB276E870B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		354AA773A44C1C71DDDBDBBF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		38A1AB6C6085E3E151641449 /* CrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewDetailView.swift; sourceTree = "<group>"; };
+		3903BFC79EB45D6A3527B444 /* AlertDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDetailView.swift; sourceTree = "<group>"; };
+		4BF9CB0B49BA86E5602E307D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		4E66ADB371460BAB108F89DA /* GacaTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GacaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5274924E7CADE2866232453D /* Composer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composer.swift; sourceTree = "<group>"; };
+		586475DCFEA7128F7A01243E /* WireTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WireTests.swift; sourceTree = "<group>"; };
+		5A68F000471991E342988683 /* NewDelegationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDelegationSheet.swift; sourceTree = "<group>"; };
+		6A357BBC8558FB96FAF8C071 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		726E274535B5E73C12974AFF /* ChatThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatThreadView.swift; sourceTree = "<group>"; };
+		7517EBD87335A3B321FA3E8B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8954873348CD3F6D308DC1A8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		946EBF2AE08E89A19B60EB1C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		992F137B01151D89FB4F5173 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
+		9ED1D24BA0242A7D72544B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCrewSheet.swift; sourceTree = "<group>"; };
+		BBE0411AEBE000DA22C614C9 /* Gaca.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Gaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2A11879DA6029BD3D1B0B2D /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		C3A8799AF6FE544237F72D34 /* ChatHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryView.swift; sourceTree = "<group>"; };
+		D0E7378043CA90ED511C05CD /* GacaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GacaAPI.swift; sourceTree = "<group>"; };
+		D48EC7C1B7B248424F52294E /* ArtifactViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtifactViewer.swift; sourceTree = "<group>"; };
+		DA8075C5FB07D02F4661DCB5 /* EventStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
+		E7E816870C80477F6B523E1A /* Gaca.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gaca.entitlements; sourceTree = "<group>"; };
+		F2B740CFD4238FA3B2A7E792 /* GacaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GacaApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD58637908CE8163047AA573 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3550E11E2EEA74B2813DD39C /* MarkdownUI in Frameworks */,
+				909485D7ED134562DA94CC45 /* GoogleSignIn in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1B70BD99B5F5FF80D2878E09 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				15814B6FF1EA73DC5C909350 /* AppModel.swift */,
+				F2B740CFD4238FA3B2A7E792 /* GacaApp.swift */,
+				946EBF2AE08E89A19B60EB1C /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		215B6BE41AB758383DC2FB30 /* Artifacts */ = {
+			isa = PBXGroup;
+			children = (
+				1495704264C324B8AB0AA717 /* ArtifactsView.swift */,
+				D48EC7C1B7B248424F52294E /* ArtifactViewer.swift */,
+			);
+			path = Artifacts;
+			sourceTree = "<group>";
+		};
+		4B6F36A279B441E51D4BA6D1 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				C2A11879DA6029BD3D1B0B2D /* Components.swift */,
+				354AA773A44C1C71DDDBDBBF /* Theme.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		56E2C5516CF468739C2221CE /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				113BC4620A92C62A1CEB2D29 /* TodayView.swift */,
+			);
+			path = Today;
+			sourceTree = "<group>";
+		};
+		666E1BA408BCAB11442F6E64 /* GacaTests */ = {
+			isa = PBXGroup;
+			children = (
+				586475DCFEA7128F7A01243E /* WireTests.swift */,
+			);
+			path = GacaTests;
+			sourceTree = "<group>";
+		};
+		71B93C38845DF69666A60C76 /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				3903BFC79EB45D6A3527B444 /* AlertDetailView.swift */,
+				992F137B01151D89FB4F5173 /* InboxView.swift */,
+				5A68F000471991E342988683 /* NewDelegationSheet.swift */,
+			);
+			path = Inbox;
+			sourceTree = "<group>";
+		};
+		7C897DE3B54C16855FC3463D /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				4BF9CB0B49BA86E5602E307D /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		86A2FCEEB871E1C0CC5E849E /* Gaca */ = {
+			isa = PBXGroup;
+			children = (
+				1B70BD99B5F5FF80D2878E09 /* App */,
+				93B318E7856FD72AD2FB27A0 /* Core */,
+				4B6F36A279B441E51D4BA6D1 /* Design */,
+				D7B34317A822C9A48939F4DE /* Features */,
+				F74231E2743016C50BB6A081 /* Resources */,
+			);
+			path = Gaca;
+			sourceTree = "<group>";
+		};
+		8BEFF53DCCF3BC51BF49BA1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BBE0411AEBE000DA22C614C9 /* Gaca.app */,
+				4E66ADB371460BAB108F89DA /* GacaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		93B318E7856FD72AD2FB27A0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6A357BBC8558FB96FAF8C071 /* APIClient.swift */,
+				DA8075C5FB07D02F4661DCB5 /* EventStream.swift */,
+				D0E7378043CA90ED511C05CD /* GacaAPI.swift */,
+				8954873348CD3F6D308DC1A8 /* Models.swift */,
+				1C11193D52282DEB0D53A459 /* Stores.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		96E79FFDCB575EDADABF9AD2 /* Crew */ = {
+			isa = PBXGroup;
+			children = (
+				38A1AB6C6085E3E151641449 /* CrewDetailView.swift */,
+			);
+			path = Crew;
+			sourceTree = "<group>";
+		};
+		A3542EDB5A057453DF886595 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				C3A8799AF6FE544237F72D34 /* ChatHistoryView.swift */,
+				087C8BA38E0CD49DB761ADF1 /* ChatHomeView.swift */,
+				137A466092A9DCC9D508ED91 /* ChatThreadModel.swift */,
+				726E274535B5E73C12974AFF /* ChatThreadView.swift */,
+				5274924E7CADE2866232453D /* Composer.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		CF5104B40AAC04ABE1A544D5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */,
+				7517EBD87335A3B321FA3E8B /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D7B34317A822C9A48939F4DE /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				215B6BE41AB758383DC2FB30 /* Artifacts */,
+				7C897DE3B54C16855FC3463D /* Auth */,
+				A3542EDB5A057453DF886595 /* Chat */,
+				96E79FFDCB575EDADABF9AD2 /* Crew */,
+				71B93C38845DF69666A60C76 /* Inbox */,
+				CF5104B40AAC04ABE1A544D5 /* Settings */,
+				FB6C305CA27C4C8F4732293F /* Skills */,
+				56E2C5516CF468739C2221CE /* Today */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		D8C5B146EB0A0C96852693BF = {
+			isa = PBXGroup;
+			children = (
+				86A2FCEEB871E1C0CC5E849E /* Gaca */,
+				666E1BA408BCAB11442F6E64 /* GacaTests */,
+				8BEFF53DCCF3BC51BF49BA1B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F74231E2743016C50BB6A081 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9ED1D24BA0242A7D72544B71 /* Assets.xcassets */,
+				E7E816870C80477F6B523E1A /* Gaca.entitlements */,
+				23C47AC53E351CB276E870B4 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FB6C305CA27C4C8F4732293F /* Skills */ = {
+			isa = PBXGroup;
+			children = (
+				02D0BFB13B2E80CB5792F6F9 /* SkillsView.swift */,
+			);
+			path = Skills;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0A375806208A553A127716DA /* GacaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 837D5401C2B666AB7CFBEA69 /* Build configuration list for PBXNativeTarget "GacaTests" */;
+			buildPhases = (
+				98AEF0189A7DD24CDA335215 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9417D4CC245C77C541218252 /* PBXTargetDependency */,
+			);
+			name = GacaTests;
+			packageProductDependencies = (
+			);
+			productName = GacaTests;
+			productReference = 4E66ADB371460BAB108F89DA /* GacaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C37F59B231443183F3D9D8A4 /* Gaca */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A358F9D10B6BC6068325CD9 /* Build configuration list for PBXNativeTarget "Gaca" */;
+			buildPhases = (
+				54F548387EE0CB1BA3DDD390 /* Sources */,
+				B17B903F10DBA2D35B126604 /* Resources */,
+				DD58637908CE8163047AA573 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Gaca;
+			packageProductDependencies = (
+				9E9C9059FAEC605D80C5AB70 /* MarkdownUI */,
+				4D2BE60080B97B8F46753DBB /* GoogleSignIn */,
+			);
+			productName = Gaca;
+			productReference = BBE0411AEBE000DA22C614C9 /* Gaca.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0CDED05C0FC7C06E680DCBA2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					0A375806208A553A127716DA = {
+						DevelopmentTeam = "";
+					};
+					C37F59B231443183F3D9D8A4 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = F559BB49C272E5F1CE693361 /* Build configuration list for PBXProject "Gaca" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D8C5B146EB0A0C96852693BF;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				23E44E4DD57BF699BDE26FD0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				08F8A4523B0F4DF669982243 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8BEFF53DCCF3BC51BF49BA1B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C37F59B231443183F3D9D8A4 /* Gaca */,
+				0A375806208A553A127716DA /* GacaTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B17B903F10DBA2D35B126604 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93F7D4E6678502889E6DC7E4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		54F548387EE0CB1BA3DDD390 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96272FEB9BE0F55CAFD8333D /* APIClient.swift in Sources */,
+				9BEFAE9A0B80050EA05BF0A7 /* AddCrewSheet.swift in Sources */,
+				34E97168608C6D74FB202851 /* AlertDetailView.swift in Sources */,
+				98E291857E9C6974952497C1 /* AppModel.swift in Sources */,
+				E1FC82E43F4638ACFEFD2E1B /* ArtifactViewer.swift in Sources */,
+				6151978BE2EE1AE9C923F1D3 /* ArtifactsView.swift in Sources */,
+				9526C8E31B27ED58049BF379 /* ChatHistoryView.swift in Sources */,
+				64C6712E9E88C7B77CC13EB1 /* ChatHomeView.swift in Sources */,
+				849DD4659C477EBDAE3023F5 /* ChatThreadModel.swift in Sources */,
+				A166C8ECAEA361E5D2FB91E5 /* ChatThreadView.swift in Sources */,
+				B218187B2BA83E792D3795DF /* Components.swift in Sources */,
+				22C8EF961DEE943A3E8CC9B5 /* Composer.swift in Sources */,
+				8DAF3995256BEC3E73BFB9C6 /* CrewDetailView.swift in Sources */,
+				5C4253309DC1C96FAA7DA4D4 /* EventStream.swift in Sources */,
+				6A393D7D9398F0D8AB7F6309 /* GacaAPI.swift in Sources */,
+				DD3631D67A4A17EC6985868E /* GacaApp.swift in Sources */,
+				8914A75C11F872C8D560FB2E /* InboxView.swift in Sources */,
+				54A21B9B9A9EE62582741094 /* LoginView.swift in Sources */,
+				E45CF0AB04576948F479291C /* Models.swift in Sources */,
+				DA45ED3F781B69D6148A53DC /* NewDelegationSheet.swift in Sources */,
+				D2C845211CD70553292CFB25 /* RootView.swift in Sources */,
+				060F6288BB834D2F95113A3F /* SettingsView.swift in Sources */,
+				179DCCC06186F99B7D9A1019 /* SkillsView.swift in Sources */,
+				645EAA2A8AE0BEF3BB4432B1 /* Stores.swift in Sources */,
+				322BEC2136DAFCCCAA1A1EFC /* Theme.swift in Sources */,
+				6E52079437D327CED69506A9 /* TodayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98AEF0189A7DD24CDA335215 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F46D49001ABB3DA7BA815C3C /* WireTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9417D4CC245C77C541218252 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C37F59B231443183F3D9D8A4 /* Gaca */;
+			targetProxy = A16AC1BCF9EE5864A243BF5B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		17ADFFC91AE0D42278D480D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Gaca.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Gaca/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		69E0185C7E4E5FDA6A65CD64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		783A87063A2361255AB62D1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gaca.app/Gaca";
+			};
+			name = Debug;
+		};
+		9E4D3475EF7D172B276052DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Gaca.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Gaca/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A34C77AE6C68C0B219C873E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		D7C7C15E8F6B9F13743E730B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gaca.app/Gaca";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A358F9D10B6BC6068325CD9 /* Build configuration list for PBXNativeTarget "Gaca" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17ADFFC91AE0D42278D480D9 /* Debug */,
+				9E4D3475EF7D172B276052DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		837D5401C2B666AB7CFBEA69 /* Build configuration list for PBXNativeTarget "GacaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				783A87063A2361255AB62D1E /* Debug */,
+				D7C7C15E8F6B9F13743E730B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F559BB49C272E5F1CE693361 /* Build configuration list for PBXProject "Gaca" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A34C77AE6C68C0B219C873E6 /* Debug */,
+				69E0185C7E4E5FDA6A65CD64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		08F8A4523B0F4DF669982243 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = exactVersion;
+				version = 2.4.1;
+			};
+		};
+		23E44E4DD57BF699BDE26FD0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = exactVersion;
+				version = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D2BE60080B97B8F46753DBB /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23E44E4DD57BF699BDE26FD0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		9E9C9059FAEC605D80C5AB70 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08F8A4523B0F4DF669982243 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0CDED05C0FC7C06E680DCBA2 /* Project object */;
+}

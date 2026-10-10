@@ -1,0 +1,11 @@
+// Settings shared by every configuration. Values here are public, not secrets.
+
+// The API the app talks to until changed in Settings. Must end in /api/.
+// (xcconfig treats // as a comment, hence the $() trick for the scheme separator.)
+GACA_DEFAULT_API_BASE = https:/$()/goodandcheapagent.com/api/
+
+// Google sign-in — paste the iOS OAuth client id from Google Cloud console here,
+// and its reversed form (com.googleusercontent.apps.<...>) below. Empty hides the
+// "Sign in with Google" button.
+GOOGLE_IOS_CLIENT_ID =
+GOOGLE_IOS_REVERSED_CLIENT_ID = dev.monts.gaca.google-unset
