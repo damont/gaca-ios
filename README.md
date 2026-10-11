@@ -40,17 +40,16 @@ To put it on your own iPhone, copy `Config/Local.xcconfig.example` to `Config/Lo
 
 | Setting | What |
 |---|---|
-| `DEVELOPMENT_TEAM` | Your Apple Team ID. A free Apple ID works for sideloading (Xcode › Settings › Accounts shows its team id) |
+| `DEVELOPMENT_TEAM` | Your Apple Team ID (developer.apple.com/account › Membership details) |
 | `PRODUCT_BUNDLE_IDENTIFIER` | Must be unique to you, e.g. `com.yourname.gaca` |
-| `CODE_SIGN_ENTITLEMENTS` + `GACA_PUSH_ENABLED` | Leave them out for a free Apple ID. With a paid developer team, set `Gaca/Resources/Push.entitlements` and `YES` to get push notifications |
+| `CODE_SIGN_ENTITLEMENTS` + `GACA_PUSH_ENABLED` | Push is on by default and needs a paid developer team. With a free Apple ID, set `Gaca/Resources/Basic.entitlements` and `NO` (the app then runs without notifications) |
 
 Then pick your iPhone in Xcode and press Run. Apps signed with a free Apple ID expire after 7
 days. Rebuild to renew.
 
-Push notifications go straight from gaca-api to Apple (APNs), so they need a paid team. The
-server needs an APNs key from that same team, and `GACA_APNS_TOPIC` must equal the bundle
-id. Debug builds register their token as `sandbox`, release builds as `production`. See
-gaca-api's `.env.example` for the `GACA_APNS_*` settings. Without push the app works
+Push notifications go straight from gaca-api to Apple (APNs). The server needs an APNs key
+from the team that signed the app, and `GACA_APNS_TOPIC` must equal the bundle id. Debug builds register their token as `sandbox`, release builds as `production`. See
+gaca-api's `.env.example` for the `GACA_APNS_*` settings. A build without push works
 normally and doesn't ask for notification permission.
 
 ## Testing against a local API with a fake agent

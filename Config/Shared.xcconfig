@@ -5,9 +5,9 @@
 // copy Local.xcconfig.example). These defaults build for the simulator as-is.
 DEVELOPMENT_TEAM =
 PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca
-// No push entitlement by default, so a free Apple ID can sign and sideload the app.
-// Push needs a paid team: use Push.entitlements in Local.xcconfig.
-CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Basic.entitlements
-GACA_PUSH_ENABLED = NO
+// Push notifications are on by default, which needs a paid Apple Developer team.
+// A free Apple ID can't sign push, so Local.xcconfig can switch to Basic.entitlements.
+CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Push.entitlements
+GACA_PUSH_ENABLED = YES
 
 #include? "Local.xcconfig"

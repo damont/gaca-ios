@@ -5,9 +5,9 @@
 DEVELOPMENT_TEAM = ABCDE12345
 
 // Bundle ids are unique across Apple, so anyone besides the maintainer needs their own.
-// If you turn on push, set gaca-api's GACA_APNS_TOPIC to the same value.
+// Set gaca-api's GACA_APNS_TOPIC to the same value.
 PRODUCT_BUNDLE_IDENTIFIER = com.example.gaca
 
-// Paid Apple Developer teams only: turns on push notifications.
-// CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Push.entitlements
-// GACA_PUSH_ENABLED = YES
+// Free Apple ID (no paid developer team)? Apple doesn't allow push, so turn it off:
+// CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Basic.entitlements
+// GACA_PUSH_ENABLED = NO
