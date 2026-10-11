@@ -6,3 +6,4 @@ build/
 .build/
 *.ipa
 *.dSYM.zip
+Config/Local.xcconfig

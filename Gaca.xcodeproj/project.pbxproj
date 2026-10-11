@@ -83,16 +83,19 @@
 		946EBF2AE08E89A19B60EB1C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		992F137B01151D89FB4F5173 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		9ED1D24BA0242A7D72544B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A0909B157AB28A9183485344 /* Push.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Push.entitlements; sourceTree = "<group>"; };
+		AB2121CFE0B08E5F9EB632DA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCrewSheet.swift; sourceTree = "<group>"; };
 		BBE0411AEBE000DA22C614C9 /* Gaca.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Gaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1B650D4F20D628285741E2B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		C2A11879DA6029BD3D1B0B2D /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		C3A8799AF6FE544237F72D34 /* ChatHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryView.swift; sourceTree = "<group>"; };
 		D0E7378043CA90ED511C05CD /* GacaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GacaAPI.swift; sourceTree = "<group>"; };
 		D48EC7C1B7B248424F52294E /* ArtifactViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtifactViewer.swift; sourceTree = "<group>"; };
 		DA8075C5FB07D02F4661DCB5 /* EventStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStream.swift; sourceTree = "<group>"; };
-		E7E816870C80477F6B523E1A /* Gaca.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gaca.entitlements; sourceTree = "<group>"; };
 		EC988CB45D09C858F04AF360 /* FlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowTests.swift; sourceTree = "<group>"; };
 		F2B740CFD4238FA3B2A7E792 /* GacaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GacaApp.swift; sourceTree = "<group>"; };
+		F407347CD4455CAA5B97483E /* Basic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Basic.entitlements; sourceTree = "<group>"; };
 		FB718432D2E512DA5EDF726C /* PairingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingTests.swift; sourceTree = "<group>"; };
 		FBBFE84AE8CB29B063EED2DB /* ServerAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerAddress.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -262,6 +265,7 @@
 		D8C5B146EB0A0C96852693BF = {
 			isa = PBXGroup;
 			children = (
+				DCBD80392334782D79234D90 /* Config */,
 				86A2FCEEB871E1C0CC5E849E /* Gaca */,
 				666E1BA408BCAB11442F6E64 /* GacaTests */,
 				CD5000CC13C1F3393380FBC7 /* GacaUITests */,
@@ -269,12 +273,22 @@
 			);
 			sourceTree = "<group>";
 		};
+		DCBD80392334782D79234D90 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				C1B650D4F20D628285741E2B /* Debug.xcconfig */,
+				AB2121CFE0B08E5F9EB632DA /* Release.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		F74231E2743016C50BB6A081 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				9ED1D24BA0242A7D72544B71 /* Assets.xcassets */,
-				E7E816870C80477F6B523E1A /* Gaca.entitlements */,
+				F407347CD4455CAA5B97483E /* Basic.entitlements */,
 				23C47AC53E351CB276E870B4 /* Info.plist */,
+				A0909B157AB28A9183485344 /* Push.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -356,16 +370,14 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					0A375806208A553A127716DA = {
-						DevelopmentTeam = 29PC3482HK;
 						ProvisioningStyle = Automatic;
 					};
 					2997A26D81FE96E5461CFCAE = {
-						DevelopmentTeam = 29PC3482HK;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C37F59B231443183F3D9D8A4;
 					};
 					C37F59B231443183F3D9D8A4 = {
-						DevelopmentTeam = 29PC3482HK;
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -492,9 +504,9 @@
 		};
 		17ADFFC91AE0D42278D480D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C1B650D4F20D628285741E2B /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Gaca.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -503,7 +515,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -546,7 +557,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 29PC3482HK;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -605,9 +615,9 @@
 		};
 		9E4D3475EF7D172B276052DE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB2121CFE0B08E5F9EB632DA /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Gaca.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -616,7 +626,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.monts.gaca;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -659,7 +668,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 29PC3482HK;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

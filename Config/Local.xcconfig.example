@@ -1,0 +1,13 @@
+// Copy to Config/Local.xcconfig (git ignores it) and fill in your own values.
+
+// Your Apple Developer Team ID (developer.apple.com/account › Membership details,
+// or the team shown in Xcode › Settings › Accounts).
+DEVELOPMENT_TEAM = ABCDE12345
+
+// Bundle ids are unique across Apple, so anyone besides the maintainer needs their own.
+// If you turn on push, set gaca-api's GACA_APNS_TOPIC to the same value.
+PRODUCT_BUNDLE_IDENTIFIER = com.example.gaca
+
+// Paid Apple Developer teams only: turns on push notifications.
+// CODE_SIGN_ENTITLEMENTS = Gaca/Resources/Push.entitlements
+// GACA_PUSH_ENABLED = YES

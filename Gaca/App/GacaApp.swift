@@ -36,6 +36,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         #if DEBUG
         if ProcessInfo.processInfo.environment["GACA_UITEST_RESET"] != nil { return true }
         #endif
+        // Builds signed without the push entitlement (e.g. a free Apple ID) can't get a token.
+        guard Bundle.main.object(forInfoDictionaryKey: "GacaPushEnabled") as? String == "YES" else { return true }
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
             guard granted else { return }
             DispatchQueue.main.async { application.registerForRemoteNotifications() }
