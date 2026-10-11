@@ -14,9 +14,9 @@ settings:
     SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
-    # Set your Apple Developer team here (or in Xcode › Signing & Capabilities)
-    # to run on a real device. Simulator builds don't need it.
-    DEVELOPMENT_TEAM: ""
+    # Apple Developer team used to sign for real devices and push.
+    DEVELOPMENT_TEAM: 29PC3482HK
+    CODE_SIGN_STYLE: Automatic
 
 packages:
   MarkdownUI:

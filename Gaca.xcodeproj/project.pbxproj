@@ -356,14 +356,17 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					0A375806208A553A127716DA = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 29PC3482HK;
+						ProvisioningStyle = Automatic;
 					};
 					2997A26D81FE96E5461CFCAE = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 29PC3482HK;
+						ProvisioningStyle = Automatic;
 						TestTargetID = C37F59B231443183F3D9D8A4;
 					};
 					C37F59B231443183F3D9D8A4 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 29PC3482HK;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -539,10 +542,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 29PC3482HK;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -651,10 +655,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 29PC3482HK;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

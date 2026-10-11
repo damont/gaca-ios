@@ -34,7 +34,7 @@ forget this phone. Plain-http addresses are accepted only in debug builds.
 
 | What | Where |
 |---|---|
-| Signing team (real devices, push) | `project.yml` → `DEVELOPMENT_TEAM`, then `xcodegen generate` |
+| Signing team (real devices, push) | `project.yml` → `DEVELOPMENT_TEAM` (29PC3482HK) |
 | Bundle id | `dev.monts.gaca` (same as Android). gaca-api's `GACA_APNS_TOPIC` must match |
 
 Push notifications go straight from gaca-api to Apple (APNs). Debug builds register their
