@@ -7,8 +7,17 @@ import Foundation
 
 // MARK: Auth
 
-struct TokenResponse: Decodable, Sendable {
+/// What `GET /setup` answers before this phone has a credential: is this a GACA server.
+struct SetupStatus: Decodable, Sendable {
+    let version: String?
+    let claimed: Bool?
+}
+
+/// Trading the one-time code from `gaca-api pair` for this device's credential.
+struct PairRequest: Encodable { let code: String; let name: String }
+struct PairResponse: Decodable, Sendable {
     let accessToken: String
+    let deviceId: String?
 }
 
 struct UserResponse: Decodable, Sendable, Equatable {
@@ -17,9 +26,6 @@ struct UserResponse: Decodable, Sendable, Equatable {
     let email: String
 }
 
-struct LoginRequest: Encodable { let email: String; let password: String }
-struct RegisterRequest: Encodable { let name: String; let email: String; let password: String }
-struct GoogleLoginRequest: Encodable { let idToken: String }
 
 // MARK: Agent & crew
 

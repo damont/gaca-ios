@@ -22,9 +22,6 @@ packages:
   MarkdownUI:
     url: https://github.com/gonzalezreal/swift-markdown-ui
     exactVersion: 2.4.1
-  GoogleSignIn:
-    url: https://github.com/google/GoogleSignIn-iOS
-    exactVersion: 8.0.0
 
 targets:
   Gaca:
@@ -34,8 +31,6 @@ targets:
       - path: Gaca
     dependencies:
       - package: MarkdownUI
-      - package: GoogleSignIn
-        product: GoogleSignIn
     entitlements:
       path: Gaca/Resources/Gaca.entitlements
       properties:
@@ -52,17 +47,12 @@ targets:
         UIBackgroundModes:
           - remote-notification
         ITSAppUsesNonExemptEncryption: false
-        # Google sign-in: the iOS OAuth client id from Google Cloud console, and its
-        # reversed form as a URL scheme. Leave GIDClientID empty to hide the button.
-        GIDClientID: $(GOOGLE_IOS_CLIENT_ID)
+        # gaca://setup?url=…&code=… (what `gaca-api pair` prints), gaca://artifact/<id>, …
         CFBundleURLTypes:
-          - CFBundleURLName: google-signin
-            CFBundleURLSchemes:
-              - $(GOOGLE_IOS_REVERSED_CLIENT_ID)
           - CFBundleURLName: gaca
             CFBundleURLSchemes:
               - gaca
-        GacaDefaultAPIBase: $(GACA_DEFAULT_API_BASE)
+        NSCameraUsageDescription: Scan the QR code your GACA server shows to pair this iPhone with it.
         # Lets Settings point at a dev box on the LAN (plain http) — public internet
         # traffic still has to be https.
         NSAppTransportSecurity:

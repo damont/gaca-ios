@@ -22,14 +22,6 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>google-signin</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>$(GOOGLE_IOS_REVERSED_CLIENT_ID)</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLName</key>
 			<string>gaca</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -39,10 +31,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>GIDClientID</key>
-	<string>$(GOOGLE_IOS_CLIENT_ID)</string>
-	<key>GacaDefaultAPIBase</key>
-	<string>$(GACA_DEFAULT_API_BASE)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
@@ -50,6 +38,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan the QR code your GACA server shows to pair this iPhone with it.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

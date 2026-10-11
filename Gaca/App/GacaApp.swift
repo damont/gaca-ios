@@ -1,4 +1,3 @@
-import GoogleSignIn
 import SwiftUI
 import UIKit
 import UserNotifications
@@ -18,10 +17,7 @@ struct GacaApp: App {
             RootView()
                 .environment(model)
                 .onAppear { delegate.model = model }
-                .onOpenURL { url in
-                    if GIDSignIn.sharedInstance.handle(url) { return }
-                    model.handle(url: url)
-                }
+                .onOpenURL { url in model.handle(url: url) }
         }
     }
 }

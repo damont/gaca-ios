@@ -9,24 +9,15 @@ final class FlowTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         let env = ProcessInfo.processInfo.environment
-        guard let base = env["GACA_E2E_BASE"] else { throw XCTSkip("No local API — run tools/e2e.sh") }
+        guard let base = env["GACA_E2E_BASE"], let token = env["GACA_E2E_TOKEN"] else {
+            throw XCTSkip("No local API — run tools/e2e.sh")
+        }
         app = XCUIApplication()
         app.launchEnvironment["GACA_API_BASE"] = base
         app.launchEnvironment["GACA_UITEST_RESET"] = "1"
+        app.launchEnvironment["GACA_UITEST_TOKEN"] = token
         app.launch()
-        signIn(email: env["GACA_E2E_EMAIL"] ?? "e2e@example.com", password: env["GACA_E2E_PASSWORD"] ?? "e2e-password-1")
-    }
-
-    private func signIn(email: String, password: String) {
-        let emailField = app.textFields["you@example.com"]
-        XCTAssertTrue(emailField.waitForExistence(timeout: 10))
-        emailField.tap()
-        emailField.typeText(email)
-        let passwordField = app.secureTextFields["Required"]
-        passwordField.tap()
-        passwordField.typeText(password)
-        app.buttons["login.submit"].tap()
-        XCTAssertTrue(app.navigationBars["Chat"].waitForExistence(timeout: 15), "should land on the Chat tab")
+        XCTAssertTrue(app.navigationBars["Chat"].waitForExistence(timeout: 15), "should open on the Chat tab, paired")
     }
 
     /// Any element whose accessibility label contains `text` (SwiftUI often folds a row's

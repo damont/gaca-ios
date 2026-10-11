@@ -2,16 +2,18 @@ import Foundation
 
 /// One method per gaca-api endpoint the app uses — mirrors gaca-android's GacaApi.kt.
 extension APIClient {
-    // MARK: Auth
-    func login(email: String, password: String) async throws -> TokenResponse {
-        try await post("auth/login", LoginRequest(email: email, password: password))
+    // MARK: Pairing & identity
+    /// Is there a GACA server at `base` (before this phone has a credential)?
+    func setupStatus(at base: URL) async throws -> SetupStatus {
+        try await unauthenticated("GET", base.appendingPathComponent("setup"), body: nil)
     }
-    func register(name: String, email: String, password: String) async throws -> TokenResponse {
-        try await post("auth/register", RegisterRequest(name: name, email: email, password: password))
+    /// Trade the code `gaca-api pair` printed for this device's credential.
+    func pair(at base: URL, code: String, deviceName: String) async throws -> PairResponse {
+        try await unauthenticated("POST", base.appendingPathComponent("devices/pair"),
+                                  body: try Self.encoder.encode(PairRequest(code: code, name: deviceName)))
     }
-    func googleLogin(idToken: String) async throws -> TokenResponse {
-        try await post("auth/google", GoogleLoginRequest(idToken: idToken))
-    }
+    /// This phone forgets the server: the server revokes its credential.
+    func unpairThisDevice() async throws { try await sendVoid("DELETE", "devices/me") }
     func me() async throws -> UserResponse { try await get("auth/me") }
 
     // MARK: Agent & crew

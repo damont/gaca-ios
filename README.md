@@ -27,12 +27,15 @@ xcodebuild -project Gaca.xcodeproj -scheme Gaca \
 
 ## Configuration
 
+There's no sign-in and no built-in server address. On first launch the app pairs with a
+server: run `gaca-api pair` on the server, then scan the QR code it shows (or tap its
+`gaca://setup` link, or type the address and code). Settings › Disconnect makes the server
+forget this phone. Plain-http addresses are accepted only in debug builds.
+
 | What | Where |
 |---|---|
-| Default API base URL | `Config/Shared.xcconfig` → `GACA_DEFAULT_API_BASE` (also changeable in the app's Settings) |
-| Google sign-in | `Config/Shared.xcconfig` → `GOOGLE_IOS_CLIENT_ID` and `GOOGLE_IOS_REVERSED_CLIENT_ID`; the same client id goes in gaca-api's `GACA_GOOGLE_IOS_CLIENT_ID` |
-| Signing team (for real devices, push) | `project.yml` → `DEVELOPMENT_TEAM`, then `xcodegen generate` |
-| Bundle id | `dev.monts.gaca` (same as Android); gaca-api's `GACA_APNS_TOPIC` must match |
+| Signing team (real devices, push) | `project.yml` → `DEVELOPMENT_TEAM`, then `xcodegen generate` |
+| Bundle id | `dev.monts.gaca` (same as Android). gaca-api's `GACA_APNS_TOPIC` must match |
 
 Push notifications go straight from gaca-api to Apple (APNs). Debug builds register their
 token as `sandbox`, release builds as `production`. See gaca-api's `.env.example` for the
@@ -48,13 +51,13 @@ agent:
 uv run --project ../gaca/gaca-api python tools/fake_hermes.py --port 18642
 ```
 
-`tools/e2e.sh` starts a throwaway gaca-api and the fake agent, seeds an account, and runs
-the UI tests against them.
+`tools/e2e.sh` starts a throwaway gaca-api and the fake agent, pairs with the server using
+`gaca-api pair`, seeds data, and runs the UI tests (including the pairing screen) against them.
 
 ## Layout
 
 - `Gaca/App`: entry point, push handling, tabs, navigation
 - `Gaca/Core`: API client, wire models, SSE event stream, Keychain/settings
 - `Gaca/Design`: palette and shared components
-- `Gaca/Features/*`: one folder per area (Chat, Today, Inbox, Artifacts, Skills, Crew, Settings, Auth)
+- `Gaca/Features/*`: one folder per area (Pairing, Chat, Today, Inbox, Artifacts, Skills, Crew, Settings)
 - `GacaTests`: unit tests; `GacaUITests`: end-to-end tests against a local API

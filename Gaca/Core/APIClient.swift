@@ -98,6 +98,20 @@ final class APIClient: @unchecked Sendable {
         try await send("POST", path, json: json ?? EmptyBody(), as: T.self)
     }
 
+    /// A call to a server this phone isn't paired with yet (no token, an explicit address).
+    func unauthenticated<T: Decodable>(_ method: String, _ url: URL, body: Data?) async throws -> T {
+        var req = URLRequest(url: url)
+        req.httpMethod = method
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        if let body {
+            req.httpBody = body
+            req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        req.timeoutInterval = 20
+        let data = try await perform(req)
+        do { return try Self.decoder.decode(T.self, from: data) } catch { throw APIError.decoding(String(describing: error)) }
+    }
+
     func data(for request: URLRequest) async throws -> Data {
         try await perform(request)
     }

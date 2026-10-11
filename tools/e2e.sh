@@ -3,7 +3,7 @@
 # a briefing and an artifact; then the UI tests run against them in the simulator.
 #
 #   tools/e2e.sh                      # all UI flows
-#   tools/e2e.sh testFailedRunShowsError   # one flow
+#   tools/e2e.sh FlowTests/testFailedRunShowsError   # one flow
 #
 # Needs ../gaca checked out next to this repo, and uv.
 set -euo pipefail
@@ -15,8 +15,6 @@ HERMES_PORT="${HERMES_PORT:-18642}"
 SIM="${SIM:-iPhone 17}"
 BASE="http://127.0.0.1:$API_PORT/api"
 WORK="$(mktemp -d)"
-EMAIL="e2e@example.com"
-PASSWORD="e2e-password-1"
 PIDS=()
 
 cleanup() { for p in "${PIDS[@]:-}"; do kill "$p" 2>/dev/null || true; done; }
@@ -28,10 +26,11 @@ wait_for() { for _ in $(seq 1 60); do curl -sf "$1" >/dev/null 2>&1 && return 0;
 lsof -ti ":$API_PORT" -ti ":$HERMES_PORT" | xargs kill 2>/dev/null || true
 sleep 0.5
 
+export GACA_DB_PATH="$WORK/gaca.db" GACA_AGENT_ENGINE=hermes GACA_API_PORT="$API_PORT" \
+  GACA_JWT_SECRET="e2e-secret-that-is-long-enough-for-hs256-signing" GACA_PUBLIC_URL="http://127.0.0.1:$API_PORT"
+
 echo "› starting gaca-api on :$API_PORT (db in $WORK)"
-(cd "$API_DIR" && GACA_DB_PATH="$WORK/gaca.db" GACA_AGENT_ENGINE=hermes \
-  GACA_JWT_SECRET="e2e-secret-that-is-long-enough-for-hs256-signing" GACA_API_PORT="$API_PORT" \
-  uv run uvicorn gaca_api.main:app --port "$API_PORT" --log-level warning >"$WORK/api.log" 2>&1) &
+(cd "$API_DIR" && uv run uvicorn gaca_api.main:app --port "$API_PORT" --log-level warning >"$WORK/api.log" 2>&1) &
 PIDS+=($!)
 wait_for "$BASE/health"
 
@@ -39,8 +38,11 @@ post() { curl -sS --fail-with-body -X "${3:-POST}" "$BASE/$1" -H "Authorization:
 json() { python3 -c "import sys,json; print(json.load(sys.stdin)$1)"; }
 
 echo "› seeding"
-TOKEN=$(curl -sS --fail-with-body -X POST "$BASE/auth/register" -H 'Content-Type: application/json' \
-  -d "{\"name\":\"E2E\",\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}" | json "['access_token']")
+# A pairing code, the same way the owner gets one: `gaca-api pair` on the server.
+pair_code() { (cd "$API_DIR" && uv run gaca-api pair --no-qr) 2>/dev/null | sed -n 's/^Pairing code:  *\([^ ]*\).*/\1/p'; }
+CODE=$(pair_code)
+TOKEN=$(curl -sS --fail-with-body -X POST "$BASE/devices/pair" -H 'Content-Type: application/json' \
+  -d "{\"code\":\"$CODE\",\"name\":\"e2e seeder\"}" | json "['access_token']")
 
 ARTIFACT=$(post artifacts '{"title":"Disk usage","description":"By directory, refreshed hourly","crew":"toolshed",
   "state":{"count":1},
@@ -69,12 +71,16 @@ post "briefings/$TODAY/sections/calendar" '{"title":"Calendar","kind":"calendar"
   {"title":"Lunch with Sam","time":"12:00 PM","location":"Tartine","priority":"medium"},
   {"title":"Farmers market","time":"Before 2:00 PM","location":"Ferry Building","priority":"low"}]}' PUT >/dev/null
 
+# A fresh code for the pairing-screen test (issuing one replaces any earlier code).
+UI_CODE=$(pair_code)
+
 echo "› running UI tests on $SIM"
 ONLY="-only-testing:GacaUITests"
-[[ $# -gt 0 ]] && ONLY="-only-testing:GacaUITests/FlowTests/$1"
+[[ $# -gt 0 ]] && ONLY="-only-testing:GacaUITests/$1"
 cd "$HERE"
 rm -rf build/e2e.xcresult
-TEST_RUNNER_GACA_E2E_BASE="$BASE/" TEST_RUNNER_GACA_E2E_EMAIL="$EMAIL" TEST_RUNNER_GACA_E2E_PASSWORD="$PASSWORD" \
+TEST_RUNNER_GACA_E2E_BASE="$BASE/" TEST_RUNNER_GACA_E2E_TOKEN="$TOKEN" \
+TEST_RUNNER_GACA_E2E_SERVER="http://127.0.0.1:$API_PORT" TEST_RUNNER_GACA_E2E_CODE="$UI_CODE" \
 xcodebuild -project Gaca.xcodeproj -scheme Gaca -destination "platform=iOS Simulator,name=$SIM" \
   -derivedDataPath build/dd -resultBundlePath build/e2e.xcresult -collect-test-diagnostics never $ONLY test CODE_SIGNING_ALLOWED=NO \
   | grep -E "Test Case|error:|failed|TEST (SUCCEEDED|FAILED)" || true

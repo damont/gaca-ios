@@ -10,8 +10,8 @@ struct RootView: View {
                 ProgressView().tint(Palette.accent)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Palette.page)
-            case .signedOut:
-                LoginView()
+            case .unpaired(let server):
+                PairingView(prefillServer: server)
             case .signedIn:
                 MainTabs()
             }

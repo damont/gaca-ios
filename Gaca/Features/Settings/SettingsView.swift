@@ -2,8 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
-    @State private var apiBase = ""
-    @State private var savedBase = false
+    @State private var disconnecting = false
     @State private var agent: AgentStatus?
     @State private var error: String?
     @State private var adding = false
@@ -14,20 +13,6 @@ struct SettingsView: View {
 
     var body: some View {
         List {
-            Section {
-                TextField("https://…/api/", text: $apiBase)
-                    .keyboardType(.URL)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .onSubmit(saveBase)
-                Button(savedBase ? "Saved" : "Save", action: saveBase)
-                    .disabled(SettingsStore.normalize(apiBase) == model.api.settings.apiBaseString)
-            } header: {
-                SectionLabel(text: "Server")
-            } footer: {
-                Text("Ends in /api/. Point this at a dev box on your LAN to test against it.")
-            }
-
             Section {
                 if let agent {
                     if agent.connected {
@@ -113,15 +98,17 @@ struct SettingsView: View {
             }
 
             Section {
-                if case .signedIn(let user) = model.auth, !user.email.isEmpty {
-                    HStack {
-                        Text("Signed in as")
-                        Spacer()
-                        Text(user.email).foregroundStyle(Palette.textSecondary)
-                    }
+                HStack {
+                    Text("Paired with")
+                    Spacer()
+                    Text(model.api.settings.serverLabel ?? "—").foregroundStyle(Palette.textSecondary)
                 }
-                Button("Sign out", role: .destructive) { Task { await model.signOut() } }
+                Button("Disconnect from this server", role: .destructive) { disconnecting = true }
                     .frame(maxWidth: .infinity)
+            } header: {
+                SectionLabel(text: "Server")
+            } footer: {
+                Text("Disconnecting tells the server to forget this iPhone. To connect again, run gaca-api pair on the server.")
             }
         }
         .listStyle(.insetGrouped)
@@ -147,10 +134,12 @@ struct SettingsView: View {
             Text("The address of the box Hermes now runs on.")
         }
         .refreshable { await load() }
-        .task {
-            apiBase = model.api.settings.apiBaseString
-            await load()
+        .confirmationDialog("Disconnect from this server?", isPresented: $disconnecting, titleVisibility: .visible) {
+            Button("Disconnect", role: .destructive) { Task { await model.disconnect() } }
+        } message: {
+            Text("This iPhone stops receiving alerts and chats until you pair it again.")
         }
+        .task { await load() }
     }
 
     private func load() async {
@@ -162,13 +151,6 @@ struct SettingsView: View {
         } catch {
             self.error = error.localizedDescription
         }
-    }
-
-    private func saveBase() {
-        model.api.settings.apiBaseString = apiBase
-        apiBase = model.api.settings.apiBaseString
-        savedBase = true
-        Task { await load() }
     }
 
     private func crewAction(_ work: @escaping () async throws -> CrewList) {

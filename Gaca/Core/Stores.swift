@@ -1,8 +1,9 @@
 import Foundation
 import Security
 
-/// Device-local configuration: which API this app talks to. (Everything about the user's
-/// data lives in gaca-api; this is only "where is it".)
+/// Device-local configuration: which server this phone is paired with. (Everything about the
+/// owner's data lives in gaca-api; this is only "where is it".) The app ships without one —
+/// pairing sets it.
 final class SettingsStore: @unchecked Sendable {
     private let defaults: UserDefaults
     private let key = "apiBase"
@@ -11,29 +12,27 @@ final class SettingsStore: @unchecked Sendable {
         self.defaults = defaults
     }
 
-    static var bundledDefault: String {
-        let raw = Bundle.main.object(forInfoDictionaryKey: "GacaDefaultAPIBase") as? String ?? ""
-        return raw.isEmpty ? "https://goodandcheapagent.com/api/" : raw
-    }
-
-    var apiBaseString: String {
+    /// The paired server's API base (ends in `/api/`), or nil before pairing.
+    var apiBaseString: String? {
         get {
             #if DEBUG
             // UI tests point the app at a throwaway local API.
-            if let override = ProcessInfo.processInfo.environment["GACA_API_BASE"] { return Self.normalize(override) }
+            if let override = ProcessInfo.processInfo.environment["GACA_API_BASE"] { return ServerAddress.normalize(override, allowHTTP: true) }
             #endif
-            return defaults.string(forKey: key) ?? Self.bundledDefault
+            return defaults.string(forKey: key)
         }
-        set { defaults.set(Self.normalize(newValue), forKey: key) }
+        set { defaults.set(newValue, forKey: key) }
     }
 
-    var apiBase: URL { URL(string: apiBaseString) ?? URL(string: Self.bundledDefault)! }
+    /// Where requests go. Before pairing nothing calls the API, so a placeholder that can't
+    /// resolve is safer than a crash.
+    var apiBase: URL { apiBaseString.flatMap(URL.init(string:)) ?? URL(string: "https://unpaired.invalid/api/")! }
 
-    /// Always ends in a single slash, so relative paths append cleanly.
-    static func normalize(_ raw: String) -> String {
-        var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        while s.hasSuffix("/") { s.removeLast() }
-        return s + "/"
+    /// The paired server as a person would say it: "gaca.example.com".
+    var serverLabel: String? {
+        guard let s = apiBaseString, let url = URL(string: s), let host = url.host() else { return nil }
+        let port = url.port.map { ":\($0)" } ?? ""
+        return host + port
     }
 }
 

@@ -74,9 +74,32 @@ final class WireTests: XCTestCase {
         XCTAssertEqual(APIClient.detail(from: Data(#"{"detail":[{"msg":"field required"}]}"#.utf8)), "field required")
     }
 
-    func testSettingsNormalizesBase() {
-        XCTAssertEqual(SettingsStore.normalize(" http://10.0.0.2:41700/api "), "http://10.0.0.2:41700/api/")
-        XCTAssertEqual(SettingsStore.normalize("https://x/api//"), "https://x/api/")
+    func testServerAddressNormalizes() {
+        XCTAssertEqual(ServerAddress.normalize("gaca.example.com", allowHTTP: false), "https://gaca.example.com/api/")
+        XCTAssertEqual(ServerAddress.normalize(" https://gaca.example.com/ ", allowHTTP: false), "https://gaca.example.com/api/")
+        XCTAssertEqual(ServerAddress.normalize("https://x.dev/api//", allowHTTP: false), "https://x.dev/api/")
+        XCTAssertEqual(ServerAddress.normalize("https://x.dev/gaca", allowHTTP: false), "https://x.dev/gaca/api/")
+        XCTAssertEqual(ServerAddress.normalize("http://10.0.0.2:41700", allowHTTP: true), "http://10.0.0.2:41700/api/")
+        XCTAssertNil(ServerAddress.normalize("http://10.0.0.2:41700", allowHTTP: false), "plain http only in debug")
+        XCTAssertNil(ServerAddress.normalize("", allowHTTP: true))
+        XCTAssertNil(ServerAddress.normalize("two words", allowHTTP: true))
+        XCTAssertNil(ServerAddress.normalize("https://u:p@x.dev", allowHTTP: false))
+        XCTAssertNil(ServerAddress.normalize("https://x.dev/?a=1", allowHTTP: false))
+        XCTAssertNil(ServerAddress.normalize("ftp://x.dev", allowHTTP: true))
+    }
+
+    func testSetupLink() {
+        let link = SetupLink("gaca://setup?url=https%3A%2F%2Fgaca.example.com&code=ABCD1234")
+        XCTAssertEqual(link?.url, "https://gaca.example.com")
+        XCTAssertEqual(link?.code, "ABCD1234")
+        XCTAssertNil(SetupLink("https://gaca.example.com"))
+        XCTAssertNil(SetupLink("gaca://artifact/abc"))
+        XCTAssertNil(SetupLink(nil))
+    }
+
+    func testDecodesPairResponse() throws {
+        let out = try APIClient.decoder.decode(PairResponse.self, from: Data(#"{"access_token":"gd_x","token_type":"bearer","device_id":"d1"}"#.utf8))
+        XCTAssertEqual(out.accessToken, "gd_x")
     }
 
     func testCrewHelpers() {
