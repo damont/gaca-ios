@@ -40,6 +40,8 @@ targets:
         UIBackgroundModes:
           - remote-notification
         ITSAppUsesNonExemptEncryption: false
+        # The palette (Design/Theme.swift) is light only, so system controls must not switch to dark.
+        UIUserInterfaceStyle: Light
         # YES only when signed with Push.entitlements (Config/*.xcconfig).
         GacaPushEnabled: $(GACA_PUSH_ENABLED)
         # gaca://setup?url=…&code=… (what `gaca-api pair` prints), gaca://artifact/<id>, …
