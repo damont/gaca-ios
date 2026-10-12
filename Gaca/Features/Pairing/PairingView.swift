@@ -19,16 +19,13 @@ struct PairingView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Image(systemName: "sparkle")
-                    .font(.system(size: 26, weight: .semibold))
-                    .foregroundStyle(Palette.onAccent)
-                    .frame(width: 56, height: 56)
-                    .background(RoundedRectangle(cornerRadius: 15).fill(Palette.accent))
-                    .padding(.bottom, 20)
-                    .accessibilityHidden(true)
-                Text("Gaca").font(.largeTitleGaca).foregroundStyle(Palette.accent)
-                Text("Connect to your server")
-                    .font(.system(size: 17)).foregroundStyle(Palette.textSecondary).padding(.top, 4)
+                VStack(spacing: 0) {
+                    BrandMark.wingsLevel.image(width: 112).padding(.bottom, 16)
+                    Text("Gaca").font(.largeTitleGaca).foregroundStyle(Palette.accent)
+                    Text("Connect to your server")
+                        .font(.system(size: 17)).foregroundStyle(Palette.textSecondary).padding(.top, 4)
+                }
+                .frame(maxWidth: .infinity)
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("On the computer that runs your GACA server, run")

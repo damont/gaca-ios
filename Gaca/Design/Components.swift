@@ -107,15 +107,31 @@ struct ErrorLine: View {
     }
 }
 
+/// The Gaca mark (gaca/branding). Wings up: something is happening or just happened;
+/// level: neutral; down: nothing needs you right now. Errors keep an SF Symbol instead.
+enum BrandMark: String {
+    case inFlight = "Mark-in-flight"
+    case wingsHigh = "Mark-wings-high"
+    case wingsLevel = "Mark-wings-level"
+    case wingsDown = "Mark-wings-down"
+
+    func image(width: CGFloat) -> some View {
+        Image(rawValue).resizable().scaledToFit().frame(width: width).accessibilityHidden(true)
+    }
+}
+
 /// A centered empty / failed state for a whole screen.
 struct EmptyState: View {
+    var mark: BrandMark? = nil
     var systemImage: String? = nil
     let title: String
     var message: String? = nil
 
     var body: some View {
         VStack(spacing: 10) {
-            if let systemImage {
+            if let mark {
+                mark.image(width: 120).padding(.bottom, 6)
+            } else if let systemImage {
                 Image(systemName: systemImage)
                     .font(.system(size: 30, weight: .semibold))
                     .foregroundStyle(Palette.accent)

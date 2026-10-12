@@ -23,9 +23,9 @@ struct ArtifactsView: View {
             if loading && artifacts.isEmpty {
                 ProgressView().frame(maxWidth: .infinity).listRowBackground(Color.clear)
             } else if shown.isEmpty {
-                EmptyState(systemImage: "square.grid.2x2",
+                EmptyState(mark: query.isEmpty ? .wingsLevel : nil,
                            title: query.isEmpty ? "Nothing here yet." : "No pages match.",
-                           message: query.isEmpty ? "Ask your crew for a page — a Costco list, a trip planner, a tracker — and it will show up here." : nil)
+                           message: query.isEmpty ? "Ask your crew for a page (a Costco list, a trip planner, a tracker) and it will show up here." : nil)
                     .listRowBackground(Color.clear)
             }
             Section {

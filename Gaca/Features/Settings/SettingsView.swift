@@ -110,6 +110,11 @@ struct SettingsView: View {
             } footer: {
                 Text("Disconnecting tells the server to forget this iPhone. To connect again, run gaca-api pair on the server.")
             }
+
+            Section {
+                AboutFooter()
+            }
+            .listRowBackground(Color.clear)
         }
         .listStyle(.insetGrouped)
         .gacaPage()
@@ -162,6 +167,27 @@ struct SettingsView: View {
                 self.error = error.localizedDescription
             }
         }
+    }
+}
+
+/// The mark, the app's name and its version, at the foot of Settings.
+private struct AboutFooter: View {
+    private var version: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        return "Version \(short) (\(build))"
+    }
+
+    var body: some View {
+        VStack(spacing: 6) {
+            BrandMark.wingsLevel.image(width: 64).padding(.bottom, 4)
+            Text("Gaca for iPhone").font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.accent)
+            Text(version).font(.system(size: 13)).foregroundStyle(Palette.textSecondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .combine)
     }
 }
 

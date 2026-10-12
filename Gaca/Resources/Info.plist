@@ -50,6 +50,8 @@
 	<dict>
 		<key>UIColorName</key>
 		<string>PageBackground</string>
+		<key>UIImageName</key>
+		<string>LaunchMark</string>
 	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

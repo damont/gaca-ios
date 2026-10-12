@@ -44,10 +44,15 @@ struct ChatHomeView: View {
                 if loading && sessions.isEmpty {
                     ProgressView().frame(maxWidth: .infinity).listRowBackground(Color.clear)
                 } else if sessions.isEmpty {
-                    Text(model.crew.isEmpty ? "No crew configured yet — set one up in Settings first." : "Say something to start a new chat.")
-                        .font(.system(size: 15))
-                        .foregroundStyle(Palette.textSecondary)
-                        .listRowBackground(Color.clear)
+                    Group {
+                        if let member = pickedMember {
+                            EmptyState(mark: .wingsLevel, title: "No chats yet",
+                                       message: "Say something to \(crewDisplayName(member.name)) below and it'll get to work.")
+                        } else {
+                            EmptyState(title: "No crew configured yet", message: "Set one up in Settings first.")
+                        }
+                    }
+                    .listRowBackground(Color.clear)
                 } else {
                     ForEach(sessions.prefix(6)) { session in
                         NavigationLink(value: Route.thread(session.id)) {

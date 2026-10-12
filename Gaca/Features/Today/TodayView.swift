@@ -43,7 +43,7 @@ struct TodayView: View {
                         }
                     }
                 } else {
-                    EmptyState(systemImage: "sun.max",
+                    EmptyState(mark: .wingsDown,
                                title: isToday ? "No briefing yet today." : "No briefing for this day.",
                                message: isToday ? "Your agent posts one each morning — pull down to check again." : nil)
                 }

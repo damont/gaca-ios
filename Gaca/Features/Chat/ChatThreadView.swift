@@ -292,7 +292,7 @@ struct LiveTurn: View {
             if text.isEmpty || tool != nil {
                 TimelineView(.periodic(from: .now, by: 1)) { context in
                     HStack(spacing: 8) {
-                        PulseDot(color: style.color)
+                        FlightMark(color: style.ink)
                         Text(tool.map { "Using \($0)" } ?? "Working").fontWeight(.semibold).foregroundStyle(style.ink)
                         if let startedAt {
                             Text(Self.elapsed(from: startedAt, to: context.date))
@@ -318,14 +318,22 @@ struct LiveTurn: View {
     }
 }
 
-struct PulseDot: View {
+/// The Gaca mark in flight, in the crew's colour, gliding while a run is working.
+/// Holds still when Reduce Motion is on.
+struct FlightMark: View {
     let color: Color
-    @State private var on = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var up = false
     var body: some View {
-        Circle().fill(color).frame(width: 8, height: 8)
-            .scaleEffect(on ? 0.7 : 1).opacity(on ? 0.35 : 1)
-            .animation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true), value: on)
-            .onAppear { on = true }
+        Image("Mark-in-flight-mono")
+            .renderingMode(.template)
+            .resizable().scaledToFit()
+            .frame(width: 18, height: 18)
+            .foregroundStyle(color)
+            .rotationEffect(.degrees(up ? 3 : -4))
+            .offset(y: up ? -1.5 : 1.5)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: up)
+            .onAppear { up = !reduceMotion }
             .accessibilityHidden(true)
     }
 }

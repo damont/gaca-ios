@@ -61,7 +61,7 @@ struct InboxView: View {
             } else if alerts.isEmpty {
                 Group {
                     if tab == .attention {
-                        EmptyState(systemImage: "checkmark", title: "Nothing needs you right now",
+                        EmptyState(mark: .wingsDown, title: "Nothing needs you right now",
                                    message: "Hermes is watching. You'll hear from it when something does.")
                     } else {
                         EmptyState(title: "Nothing \(tab.rawValue.lowercased()) right now.")

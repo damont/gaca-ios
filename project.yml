@@ -34,6 +34,7 @@ targets:
         CFBundleDisplayName: Gaca
         UILaunchScreen:
           UIColorName: PageBackground
+          UIImageName: LaunchMark
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UIBackgroundModes:
