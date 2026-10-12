@@ -33,6 +33,19 @@ final class FlowTests: XCTestCase {
         add(attachment)
     }
 
+    func testKeyboardCanBePutAwayOnChatHome() {
+        let field = app.textFields["composer.field"]
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        field.tap()
+        field.typeText("draft")
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "software keyboard is up")
+        shot("08-typing-done-in-nav-bar")
+        app.buttons["composer.done"].tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5), "Done puts the keyboard away")
+        app.tabBars.buttons["Inbox"].tap()
+        XCTAssertTrue(app.navigationBars["Inbox"].waitForExistence(timeout: 5), "tab bar reachable again")
+    }
+
     func testNewChatStreamsReplyWithActivityAndPageCard() {
         // Pick the second crew member and send from the home composer.
         XCTAssertTrue(app.buttons["Chat with Toolshed"].waitForExistence(timeout: 10))

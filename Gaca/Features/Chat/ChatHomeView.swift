@@ -75,6 +75,7 @@ struct ChatHomeView: View {
         }
         .listStyle(.insetGrouped)
         .gacaPage()
+        .scrollDismissesKeyboard(.interactively)
         .contentMargins(.bottom, 90, for: .scrollContent)
         .navigationTitle("Chat")
         .toolbar {

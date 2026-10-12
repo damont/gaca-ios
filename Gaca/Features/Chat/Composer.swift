@@ -90,6 +90,17 @@ struct Composer: View {
         .background(RoundedRectangle(cornerRadius: 26).fill(Palette.surface))
         .overlay(RoundedRectangle(cornerRadius: 26).stroke(Palette.border, lineWidth: 0.5))
         .shadow(color: Palette.accent.opacity(0.12), radius: 10, y: 4)
+        // While typing, Done sits in the navigation bar (as in Notes), away from Send, to put
+        // the keyboard away and get the tab bar back. Swiping the conversation down works too.
+        .toolbar {
+            if focused {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { focused = false }
+                        .fontWeight(.semibold)
+                        .accessibilityIdentifier("composer.done")
+                }
+            }
+        }
         .onChange(of: picked) { _, items in
             guard !items.isEmpty else { return }
             picked = []
