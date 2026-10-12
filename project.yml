@@ -48,6 +48,8 @@ targets:
             CFBundleURLSchemes:
               - gaca
         NSCameraUsageDescription: Scan the QR code your GACA server shows to pair this iPhone with it.
+        # iOS asks before an app talks to a server on the home network (e.g. 192.168.x.x).
+        NSLocalNetworkUsageDescription: Connect to your GACA server when it's on your home network.
         # Lets Settings point at a dev box on the LAN (plain http) — public internet
         # traffic still has to be https.
         NSAppTransportSecurity:
