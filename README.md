@@ -41,6 +41,25 @@ Push notifications go straight from gaca-api to Apple (APNs). Debug builds regis
 token as `sandbox`, release builds as `production`. See gaca-api's `.env.example` for the
 `GACA_APNS_*` settings.
 
+## Push notifications: the secrets involved
+
+Alerts always show in the app when you open it. For them to buzz your phone, the **server** sends each one to Apple
+(APNs) itself, so these pieces have to line up. Only the key is secret.
+
+| piece | what it is | where it goes |
+|---|---|---|
+| Apple Developer team | the paid account that signs the app; its **Team ID** (10 characters, Membership page) | `project.yml` → `DEVELOPMENT_TEAM`; also given to the server |
+| Bundle id | `dev.monts.gaca` unless you change it; the app needs the **Push Notifications** capability | the server's `GACA_APNS_TOPIC` must be exactly this |
+| APNs key | a `.p8` file from developer.apple.com → Keys, with *Apple Push Notifications service* ticked. **Apple lets you download it once**, so keep it safe | on the server only, never in this repo or the app |
+| Key ID | the 10-character id shown next to that key | given to the server |
+
+On the server run `gaca-api push ios` (it asks for the `.p8` file, Key ID, Team ID and bundle id), or answer the installer's push
+question. The server stores the key in `~/.config/gaca/secrets/` with owner-only permissions. `gaca-api push status` shows what is on.
+The key must belong to the same team that signed the app: if you use someone else's build, you can pair and see alerts but cannot
+push to it. Debug builds register as APNs `sandbox` and release builds as `production`; the server handles both.
+
+More in the [gaca README](https://github.com/damont/gaca#push-notifications-optional).
+
 ## Testing against a local API with a fake agent
 
 `tools/fake_hermes.py` stands in for a Hermes gateway. It produces tool activity, streamed
