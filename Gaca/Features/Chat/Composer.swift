@@ -19,6 +19,8 @@ struct Composer: View {
 
     @State private var picked: [PhotosPickerItem] = []
     @State private var preparing = false
+    @State private var showingLibrary = false
+    @State private var showingCamera = false
     @FocusState private var focused: Bool
 
     static let maxPhotos = 4
@@ -55,7 +57,12 @@ struct Composer: View {
                 }
             }
             HStack(alignment: .bottom, spacing: 8) {
-                PhotosPicker(selection: $picked, maxSelectionCount: max(1, Self.maxPhotos - photos.count), matching: .images) {
+                Menu {
+                    if CameraPicker.isAvailable {
+                        Button { showingCamera = true } label: { Label("Take Photo", systemImage: "camera") }
+                    }
+                    Button { showingLibrary = true } label: { Label("Choose from Library", systemImage: "photo.on.rectangle") }
+                } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(Palette.accent)
@@ -64,6 +71,14 @@ struct Composer: View {
                 }
                 .disabled(photos.count >= Self.maxPhotos)
                 .accessibilityLabel("Attach photo")
+                .photosPicker(isPresented: $showingLibrary, selection: $picked,
+                              maxSelectionCount: max(1, Self.maxPhotos - photos.count), matching: .images)
+                .fullScreenCover(isPresented: $showingCamera) {
+                    CameraPicker { image in
+                        if photos.count < Self.maxPhotos, let photo = PhotoPrep.prepare(image) { photos.append(photo) }
+                    }
+                    .ignoresSafeArea()
+                }
 
                 TextField(placeholder, text: $text, axis: .vertical)
                     .lineLimit(1...5)
@@ -124,6 +139,10 @@ enum PhotoPrep {
 
     static func prepare(_ data: Data) -> PendingPhoto? {
         guard let image = UIImage(data: data) else { return nil }
+        return prepare(image)
+    }
+
+    static func prepare(_ image: UIImage) -> PendingPhoto? {
         let resized = resize(image, maxEdge: maxEdge)
         var quality: CGFloat = 0.85
         var jpeg = resized.jpegData(compressionQuality: quality)
@@ -144,5 +163,38 @@ enum PhotoPrep {
         return UIGraphicsImageRenderer(size: target, format: format).image { _ in
             image.draw(in: CGRect(origin: .zero, size: target))
         }
+    }
+}
+
+/// The system camera, for taking a photo to attach rather than picking an old one.
+struct CameraPicker: UIViewControllerRepresentable {
+    let onCapture: (UIImage) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    static var isAvailable: Bool { UIImagePickerController.isSourceTypeAvailable(.camera) }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.cameraCaptureMode = .photo
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ picker: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) { self.parent = parent }
+
+        func imagePickerController(_ picker: UIImagePickerController,
+                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage { parent.onCapture(image) }
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) { parent.dismiss() }
     }
 }

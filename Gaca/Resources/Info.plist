@@ -41,7 +41,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Scan the QR code your GACA server shows to pair this iPhone with it.</string>
+	<string>Scan the QR code your GACA server shows to pair this iPhone with it, and take photos to send in a chat.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Connect to your GACA server when it's on your home network.</string>
 	<key>UIBackgroundModes</key>
