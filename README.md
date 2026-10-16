@@ -94,4 +94,4 @@ uv run --project ../gaca/gaca-api python tools/fake_hermes.py --port 18642
 
 ## License
 
-Apache License 2.0 (see [`LICENSE`](LICENSE)). Copyright 2026 David Monts. Report security problems privately: see [`SECURITY.md`](SECURITY.md).
+Apache License 2.0 (see [`LICENSE`](LICENSE)). Copyright 2026 David Monts.
