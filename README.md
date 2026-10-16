@@ -91,3 +91,7 @@ uv run --project ../gaca/gaca-api python tools/fake_hermes.py --port 18642
 - `Gaca/Design`: palette and shared components
 - `Gaca/Features/*`: one folder per area (Pairing, Chat, Today, Inbox, Artifacts, Skills, Crew, Settings)
 - `GacaTests`: unit tests; `GacaUITests`: end-to-end tests against a local API
+
+## License
+
+Apache License 2.0 (see [`LICENSE`](LICENSE)). Copyright 2026 David Monts. Report security problems privately: see [`SECURITY.md`](SECURITY.md).
