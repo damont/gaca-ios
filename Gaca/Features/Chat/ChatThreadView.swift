@@ -3,7 +3,7 @@ import SwiftUI
 
 /// A conversation with one crew member. Your messages are compact bubbles on the right;
 /// the crew member's replies are full-width prose with what it did summarized above them
-/// (see gaca/gaca-planning/chat/design.md).
+/// (see docs/chat-design.md in the gaca repo).
 struct ChatThreadView: View {
     @Environment(AppModel.self) private var app
     @State private var model: ChatThreadModel?
