@@ -1,7 +1,6 @@
 import Foundation
 
-// Wire models — exactly what gaca-api returns (see gaca/gaca-planning/alerts/api-contract.md
-// and <base>/openapi.json). Decoded with snake_case → camelCase key conversion. The app
+// Wire models — exactly what gaca-api returns (see <base>/api/openapi.json). Decoded with snake_case → camelCase key conversion. The app
 // renders these as-is: anything derived (labels, previews, activity summaries) comes from
 // the API so every client shows the same thing.
 

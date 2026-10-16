@@ -1,8 +1,8 @@
 # GACA for iPhone
 
-The iPhone client for gaca-api, next to `gaca` (API and web) and `gaca-android`. It covers
+The iPhone client for gaca-api, next to [`gaca`](https://github.com/damont/gaca) (the API and installer) and [`gaca-android`](https://github.com/damont/gaca-android). It covers
 everything the Android app does (Chat, Today, Inbox, Artifacts, Skills, Settings) and adds
-the redesigned chat described in `gaca/gaca-planning/chat/design.md`.
+the redesigned chat described in [`docs/chat-design.md`](https://github.com/damont/gaca/blob/main/docs/chat-design.md) in the gaca repo.
 
 **A thin client by design.** The app keeps no logic or data of its own. Labels, previews,
 activity summaries, resolved artifact links, data rows and the artifact page wrapper all
@@ -91,3 +91,7 @@ uv run --project ../gaca/gaca-api python tools/fake_hermes.py --port 18642
 - `Gaca/Design`: palette and shared components
 - `Gaca/Features/*`: one folder per area (Pairing, Chat, Today, Inbox, Artifacts, Skills, Crew, Settings)
 - `GacaTests`: unit tests; `GacaUITests`: end-to-end tests against a local API
+
+## License
+
+Apache License 2.0 (see [`LICENSE`](LICENSE)). Copyright 2026 David Monts. Report security problems privately: see [`SECURITY.md`](SECURITY.md).
