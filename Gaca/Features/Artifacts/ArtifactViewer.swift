@@ -18,6 +18,8 @@ struct ArtifactViewer: View {
     @State private var resumeToken = 0
     @State private var toast: String?
     @State private var confirmDelete = false
+    /// The chat made the first time a page with no chat of its own asked, so asking again reuses it.
+    @State private var askedSessionId: String?
 
     var body: some View {
         ZStack {
@@ -128,14 +130,16 @@ struct ArtifactViewer: View {
         }
     }
 
-    /// "Ask about this page": opens the chat the page came from with the text drafted.
+    /// "Ask about this page": opens the chat the page came from (or the one made for it on the
+    /// first ask) with the text drafted.
     private func ask(_ text: String) async {
         do {
             let sessionId: String
-            if let existing = artifact?.sessionId {
+            if let existing = artifact?.sessionId ?? askedSessionId {
                 sessionId = existing
             } else {
                 sessionId = try await model.api.createSession(crew: artifact?.crew, title: artifact?.title).id
+                askedSessionId = sessionId
             }
             model.push(.thread(sessionId, draft: text))
         } catch {
