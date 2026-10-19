@@ -100,7 +100,7 @@ struct InboxView: View {
         }
         .listStyle(.plain)
         .gacaPage()
-        .navigationTitle("Inbox")
+        .navigationTitle("Alerts")
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button { composing = true } label: { Image(systemName: "square.and.pencil") }

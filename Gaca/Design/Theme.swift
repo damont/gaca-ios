@@ -20,6 +20,12 @@ enum Palette {
     static let activity = Color(hex: "#E3E8EE")
     static let destructive = Color(hex: "#B23A22")
     static let tabInactive = Color(hex: "#6A7178")
+    /// A run that worked (gaca-android Success*).
+    static let successDot = Color(hex: "#4F8A63")
+    static let successBg = Color(hex: "#DDEBE0")
+    static let successInk = Color(hex: "#2F5C3F")
+    /// Text on the urgent background (the urgent dot is too light for small text there).
+    static let urgentInk = Color(hex: "#8A3220")
 }
 
 /// Severity is a closed set on the API (info | warn | urgent), so clients may switch on it.

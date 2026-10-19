@@ -41,7 +41,7 @@ struct MainTabs: View {
             NavigationStack(path: $model.inboxPath) {
                 InboxView().routes()
             }
-            .tabItem { Label("Inbox", systemImage: "tray.fill") }
+            .tabItem { Label("Alerts", systemImage: "bell.fill") }
             .tag(AppTab.inbox)
             .badge(model.inboxCount)
 
@@ -50,6 +50,12 @@ struct MainTabs: View {
             }
             .tabItem { Label("Artifacts", systemImage: "square.grid.2x2.fill") }
             .tag(AppTab.artifacts)
+
+            NavigationStack(path: $model.automationsPath) {
+                AutomationsView().routes()
+            }
+            .tabItem { Label("Automations", systemImage: "clock.fill") }
+            .tag(AppTab.automations)
         }
         .tint(Palette.accent)
         .task {
@@ -72,6 +78,7 @@ extension View {
             case .alert(let id): AlertDetailView(alertId: id)
             case .artifact(let id): ArtifactViewer(artifactId: id)
             case .crew(let name): CrewDetailView(name: name)
+            case .automation(let crew, let id): AutomationDetailView(crew: crew, id: id)
             case .settings: SettingsView()
             }
         }
