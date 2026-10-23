@@ -20,7 +20,6 @@ final class AppModel {
     var todayPath: [Route] = []
     var inboxPath: [Route] = []
     var artifactsPath: [Route] = []
-    var skillsPath: [Route] = []
     /// The chat thread currently on screen, so a push for it can be skipped.
     var visibleSessionId: String?
     /// A `gaca://setup` link that arrived (tapped or scanned elsewhere) for the pairing screen.
@@ -130,7 +129,7 @@ final class AppModel {
         auth = .unpaired(server: keepServer ? server : nil)
         crew = []
         inboxCount = 0
-        chatPath = []; todayPath = []; inboxPath = []; artifactsPath = []; skillsPath = []
+        chatPath = []; todayPath = []; inboxPath = []; artifactsPath = []
     }
 
     func didReceivePushToken(_ token: String) async {
@@ -185,7 +184,7 @@ final class AppModel {
     }
 }
 
-enum AppTab: Hashable { case chat, today, inbox, artifacts, skills }
+enum AppTab: Hashable { case chat, today, inbox, artifacts }
 
 /// Every pushed screen in the app.
 enum Route: Hashable {

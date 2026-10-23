@@ -10,6 +10,8 @@ struct ChatThreadView: View {
     @State private var text = ""
     @State private var photos: [PendingPhoto] = []
     @State private var alert: Alert?
+    /// This crew member's skills, most used first; empty until loaded (the composer then has no skills button).
+    @State private var skills: [Skill] = []
     let sessionId: String
     var prefill: String? = nil
 
@@ -40,6 +42,10 @@ struct ChatThreadView: View {
                 await m.start()
                 if let alertId = m.detail?.alertId { alert = try? await app.api.alert(alertId) }
             }
+        }
+        .task(id: crewName) {
+            guard let crewName else { return }
+            if let list = try? await app.api.skills(crewName) { skills = list }
         }
         .onAppear { app.visibleSessionId = sessionId }
         .onDisappear {
@@ -120,11 +126,12 @@ struct ChatThreadView: View {
                         ErrorLine(text: error).padding(.horizontal, 10)
                     }
                     Composer(text: $text, photos: $photos, placeholder: "Message \(displayName)…",
-                             style: style, sending: model.sending) {
+                             style: style, sending: model.sending, skills: skills) {
                         let t = text, p = photos
+                        let content = SkillCommand.expand(t.trimmingCharacters(in: .whitespacesAndNewlines), skills: skills)
                         text = ""; photos = []
                         Task {
-                            if await !model.send(text: t, photos: p) { text = t; photos = p }
+                            if await !model.send(text: content, photos: p) { text = t; photos = p }
                         }
                     }
                 }
@@ -144,7 +151,6 @@ extension AppModel {
         case .today: todayPath.append(route)
         case .inbox: inboxPath.append(route)
         case .artifacts: artifactsPath.append(route)
-        case .skills: skillsPath.append(route)
         }
     }
 }

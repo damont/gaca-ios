@@ -11,6 +11,8 @@ struct ChatHomeView: View {
     @State private var sending = false
     @State private var loading = true
     @State private var error: String?
+    /// The picked crew member's skills, most used first; empty until loaded (the composer then has no skills button).
+    @State private var skills: [Skill] = []
 
     private var pickedMember: CrewMember? {
         model.crew.first { $0.name == picked } ?? model.defaultCrew
@@ -89,13 +91,14 @@ struct ChatHomeView: View {
             Composer(text: $text, photos: $photos,
                      placeholder: "Message \(pickedMember.map { crewDisplayName($0.name) } ?? "your crew")…",
                      style: pickedMember?.style ?? .neutral,
-                     sending: sending, onSend: send)
+                     sending: sending, skills: skills, onSend: send)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 8)
                 .disabled(model.crew.isEmpty)
         }
         .refreshable { await load() }
         .task { await load() }
+        .task(id: pickedMember?.name) { await loadSkills() }
     }
 
     private func crewChoice(_ member: CrewMember) -> some View {
@@ -135,9 +138,16 @@ struct ChatHomeView: View {
         }
     }
 
+    /// Best-effort: with no skills the composer just has no skills button, so a failure isn't an error.
+    private func loadSkills() async {
+        skills = []
+        guard let name = pickedMember?.name else { return }
+        if let list = try? await model.api.skills(name), pickedMember?.name == name { skills = list }
+    }
+
     private func send() {
         guard let member = pickedMember else { return }
-        let content = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let content = SkillCommand.expand(text.trimmingCharacters(in: .whitespacesAndNewlines), skills: skills)
         let toUpload = photos
         sending = true
         error = nil

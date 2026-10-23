@@ -28,7 +28,10 @@ extension APIClient {
     func removeCrewMember(_ name: String) async throws -> CrewList { try await send("DELETE", "crew/\(name.urlPath)") }
     func setDefaultCrewMember(_ name: String) async throws -> CrewList { try await post("crew/\(name.urlPath)/default") }
     func crewProfile(_ name: String) async throws -> CrewProfile { try await get("crew/\(name.urlPath)/profile") }
-    func skills(_ name: String) async throws -> [Skill] { try await get("crew/\(name.urlPath)/skills") }
+    /// Most used first, so the composer's sheet can show the top few as they come.
+    func skills(_ name: String) async throws -> [Skill] {
+        try await get("crew/\(name.urlPath)/skills", query: [URLQueryItem(name: "sort", value: "popular")])
+    }
 
     // MARK: Alerts
     func alerts(statuses: [String], crew: String? = nil, limit: Int = 100) async throws -> [Alert] {

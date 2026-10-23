@@ -8,19 +8,23 @@ struct PendingPhoto: Identifiable, Equatable {
     let thumbnail: UIImage
 }
 
-/// The floating message box shared by the Chat home and a thread: attach, type, send.
+/// The floating message box shared by the Chat home and a thread: attach, type, send. When the
+/// crew member has `skills`, a sparkle button next to + opens them (most used first), and typing
+/// `/` lists them above the box; picking one puts `/skill-name ` at the start of the message.
 struct Composer: View {
     @Binding var text: String
     @Binding var photos: [PendingPhoto]
     let placeholder: String
     let style: CrewStyle
     let sending: Bool
+    var skills: [Skill] = []
     let onSend: () -> Void
 
     @State private var picked: [PhotosPickerItem] = []
     @State private var preparing = false
     @State private var showingLibrary = false
     @State private var showingCamera = false
+    @State private var showingSkills = false
     @FocusState private var focused: Bool
 
     static let maxPhotos = 4
@@ -30,6 +34,24 @@ struct Composer: View {
     }
 
     var body: some View {
+        VStack(spacing: 8) {
+            if !skills.isEmpty, let query = SkillCommand.slashQuery(text) {
+                SlashSkillList(skills: skills, query: query,
+                               onPick: { text = SkillCommand.insert($0, into: text) },
+                               onSeeAll: { showingSkills = true })
+            }
+            box
+        }
+        .sheet(isPresented: $showingSkills) {
+            SkillsSheet(skills: skills) { skill in
+                showingSkills = false
+                text = SkillCommand.insert(skill, into: text)
+                focused = true
+            }
+        }
+    }
+
+    private var box: some View {
         VStack(alignment: .leading, spacing: 8) {
             if !photos.isEmpty || preparing {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -78,6 +100,19 @@ struct Composer: View {
                         if photos.count < Self.maxPhotos, let photo = PhotoPrep.prepare(image) { photos.append(photo) }
                     }
                     .ignoresSafeArea()
+                }
+
+                if !skills.isEmpty {
+                    Button { showingSkills = true } label: {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Palette.accent)
+                            .frame(width: 38, height: 38)
+                            .background(Circle().fill(Palette.suggest))
+                    }
+                    .disabled(sending)
+                    .accessibilityLabel("Skills")
+                    .accessibilityIdentifier("composer.skills")
                 }
 
                 TextField(placeholder, text: $text, axis: .vertical)

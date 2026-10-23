@@ -50,12 +50,6 @@ struct MainTabs: View {
             }
             .tabItem { Label("Artifacts", systemImage: "square.grid.2x2.fill") }
             .tag(AppTab.artifacts)
-
-            NavigationStack(path: $model.skillsPath) {
-                SkillsView().routes()
-            }
-            .tabItem { Label("Skills", systemImage: "sparkle") }
-            .tag(AppTab.skills)
         }
         .tint(Palette.accent)
         .task {

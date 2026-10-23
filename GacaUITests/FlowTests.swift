@@ -145,10 +145,17 @@ final class FlowTests: XCTestCase {
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'A quiet Saturday'")).firstMatch.waitForExistence(timeout: 10))
         shot("13-today")
 
-        // Skills come live from the (fake) Hermes, grouped by category.
-        app.tabBars.buttons["Skills"].tap()
+        // Skills come live from the (fake) Hermes, behind the composer's sparkle button.
+        app.tabBars.buttons["Chat"].tap()
+        let skillsButton = app.buttons["composer.skills"]
+        XCTAssertTrue(skillsButton.waitForExistence(timeout: 10))
+        skillsButton.tap()
         XCTAssertTrue(app.staticTexts["disk-report"].waitForExistence(timeout: 10))
         shot("14-skills")
+        app.staticTexts["disk-report"].tap()
+        let field = app.descendants(matching: .any).matching(identifier: "composer.field").firstMatch
+        XCTAssertEqual(field.value as? String, "/disk-report ")
+        if app.buttons["composer.done"].exists { app.buttons["composer.done"].tap() }
 
         // Crew detail via Settings.
         app.buttons["Settings"].firstMatch.tap()

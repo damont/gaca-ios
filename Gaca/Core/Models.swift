@@ -73,6 +73,8 @@ struct Skill: Decodable, Sendable, Identifiable, Hashable {
     let name: String
     let description: String?
     let category: String?
+    /// How often it's been used; 0 (or absent, from an older server) when the engine keeps no count.
+    var useCount: Int? = nil
     var id: String { name }
 }
 
