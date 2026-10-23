@@ -352,3 +352,83 @@ enum JSONValue: Codable, Sendable, Hashable {
         }
     }
 }
+
+// MARK: Automations
+
+/// One past run in an automation's row of squares; `status` is ok / failed / running.
+struct RunMark: Decodable, Sendable, Hashable {
+    let id: String?
+    let status: String
+    let at: Date?
+}
+
+/// GET /automations — something a crew member does on a schedule. `status` is one of ok,
+/// failed, running, paused, done, never_run; `recent` is at most 10 runs, oldest first.
+struct Automation: Decodable, Sendable, Identifiable, Hashable {
+    let id: String
+    let name: String
+    /// Which crew member owns it.
+    let crew: String?
+    /// Plain English, e.g. "Every day at 7:30 AM".
+    let schedule: String
+    var cronExpr: String? = nil
+    let status: String
+    var lastStatus: String? = nil
+    var lastRun: Date? = nil
+    var nextRun: Date? = nil
+    var recent: [RunMark]? = nil
+
+    var state: AutomationStatus { AutomationStatus(wire: status) }
+    var lastRunStatus: RunStatus? { lastStatus.map(RunStatus.init(wire:)) }
+    var marks: [RunMark] { recent ?? [] }
+    var needsAttention: Bool { state == .failed }
+    var owner: String { crew ?? "" }
+}
+
+struct AutomationList: Decodable, Sendable {
+    var automations: [Automation] = []
+    /// Crew members whose automations couldn't be read — say so rather than show an empty list as true.
+    var unavailable: [String]? = nil
+}
+
+/// GET /crew/{name}/automations/{id}/runs, newest first.
+struct AutomationRun: Decodable, Sendable, Identifiable, Hashable {
+    let id: String
+    let status: String
+    var startedAt: Date? = nil
+    var finishedAt: Date? = nil
+    var durationSeconds: Double? = nil
+    var summary: String? = nil
+    var error: String? = nil
+
+    var runStatus: RunStatus { RunStatus(wire: status) }
+    /// What it said, or why it failed; nil when it had nothing to say.
+    var output: String? { [error, summary].compactMap { $0 }.first { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } }
+}
+
+/// How one run ended. An unknown word from a newer server reads as ok rather than as a failure.
+enum RunStatus: Sendable {
+    case ok, failed, running
+    init(wire: String) {
+        switch wire {
+        case "failed": self = .failed
+        case "running": self = .running
+        default: self = .ok
+        }
+    }
+}
+
+/// The job's state as the API words it: paused jobs were switched off by the crew member, not the app.
+enum AutomationStatus: Sendable {
+    case ok, failed, running, paused, done, neverRun
+    init(wire: String) {
+        switch wire {
+        case "failed": self = .failed
+        case "running": self = .running
+        case "paused": self = .paused
+        case "done": self = .done
+        case "never_run": self = .neverRun
+        default: self = .ok
+        }
+    }
+}

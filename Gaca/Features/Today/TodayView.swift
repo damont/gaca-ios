@@ -8,6 +8,8 @@ struct TodayView: View {
     @State private var briefing: Briefing?
     @State private var loading = true
     @State private var error: String?
+    /// Every automation, for the "Scheduled today" card; empty when they can't be read (the card then hides).
+    @State private var automations: [Automation] = []
 
     private var isToday: Bool { Calendar.current.isDateInToday(day) }
 
@@ -37,12 +39,14 @@ struct TodayView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(RoundedRectangle(cornerRadius: 16).fill(Palette.suggest))
                     }
+                    if isToday { ScheduledCard(automations: automations) }
                     ForEach(briefing.sections ?? []) { section in
                         SectionCard(section: section) { link in
                             if let url = URL(string: link) { openURL(url) }
                         }
                     }
                 } else {
+                    if isToday { ScheduledCard(automations: automations) }
                     EmptyState(mark: .wingsDown,
                                title: isToday ? "No briefing yet today." : "No briefing for this day.",
                                message: isToday ? "Your agent posts one each morning — pull down to check again." : nil)
@@ -54,8 +58,13 @@ struct TodayView: View {
         .background(Palette.page)
         .navigationTitle("Today")
         .toolbar { ToolbarItem(placement: .topBarTrailing) { SettingsButton() } }
-        .refreshable { await load() }
+        .refreshable {
+            async let automations: Void = loadAutomations()
+            await load()
+            await automations
+        }
         .task(id: day) { await load() }
+        .task { await loadAutomations() }
     }
 
     private var dayBar: some View {
@@ -103,6 +112,98 @@ struct TodayView: View {
         } catch {
             briefing = nil
             self.error = error.localizedDescription
+        }
+    }
+}
+
+extension TodayView {
+    /// Best-effort and separate from the briefing: a failure just leaves the card out.
+    private func loadAutomations() async {
+        if let list = try? await model.api.automations() { automations = list.automations }
+    }
+}
+
+/// "Scheduled today": the automations that have run so far today, failures first and highlighted,
+/// how many worked, and what runs next. Tap a row for that job's history.
+private struct ScheduledCard: View {
+    @Environment(AppModel.self) private var model
+    let automations: [Automation]
+
+    private var ranToday: [Automation] {
+        automations
+            .filter { $0.lastRun.map(Calendar.current.isDateInToday) ?? false }
+            .sorted { a, b in
+                let af = a.lastRunStatus == .failed, bf = b.lastRunStatus == .failed
+                if af != bf { return af }
+                return (a.lastRun ?? .distantPast) < (b.lastRun ?? .distantPast)
+            }
+    }
+
+    private var next: (Automation, Date)? {
+        automations
+            .filter { $0.state != .paused && $0.state != .done }
+            .compactMap { a in a.nextRun.map { (a, $0) } }
+            .min { $0.1 < $1.1 }
+    }
+
+    var body: some View {
+        let ran = ranToday
+        if !ran.isEmpty || next != nil {
+            let failed = ran.filter { $0.lastRunStatus == .failed }.count
+            let worked = ran.filter { $0.lastRunStatus == .ok }.count
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Image(systemName: "clock").font(.system(size: 17, weight: .medium)).foregroundStyle(Palette.accent)
+                    Text("Scheduled today").font(.system(size: 17, weight: .semibold)).foregroundStyle(Palette.accent)
+                    Spacer()
+                    if !ran.isEmpty {
+                        Text("\(worked) of \(ran.count) ran OK")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(failed > 0 ? Palette.urgentInk : Palette.successInk)
+                            .padding(.horizontal, 10).padding(.vertical, 4)
+                            .background(Capsule().fill(failed > 0 ? SeverityStyle.of("urgent").background : Palette.successBg))
+                    }
+                }
+                .padding(.bottom, 4)
+                ForEach(ran, id: \.key) { a in
+                    let bad = a.lastRunStatus == .failed
+                    Button { model.push(.automation(crew: a.owner, id: a.id)) } label: {
+                        HStack(spacing: 12) {
+                            RunBadge(status: a.lastRunStatus ?? .ok)
+                            Text(a.name).font(.system(size: 16)).foregroundStyle(Palette.textPrimary).lineLimit(1)
+                            Spacer(minLength: 8)
+                            Text((bad ? "Failed · " : "") + (a.lastRun.map(WhenText.clock) ?? ""))
+                                .font(.system(size: 14))
+                                .foregroundStyle(bad ? Palette.urgentInk : Palette.textSecondary)
+                        }
+                        .padding(.horizontal, 8)
+                        .frame(minHeight: 44)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(bad ? SeverityStyle.of("urgent").background : .clear))
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, -8)
+                }
+                HStack {
+                    if let (a, at) = next {
+                        Text("Next: \(a.name) · \(WhenText.dayAndTime(at))")
+                            .font(.system(size: 14))
+                            .foregroundStyle(Palette.textSecondary)
+                            .lineLimit(2)
+                    }
+                    Spacer(minLength: 8)
+                    Button("All automations ›") {
+                        model.tab = .automations
+                        model.automationsPath = []
+                    }
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Palette.accent)
+                    .frame(minHeight: 44)
+                }
+            }
+            .padding(.horizontal, 16).padding(.vertical, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(RoundedRectangle(cornerRadius: 16).fill(Palette.surface))
         }
     }
 }

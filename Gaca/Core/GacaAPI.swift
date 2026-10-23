@@ -33,6 +33,22 @@ extension APIClient {
         try await get("crew/\(name.urlPath)/skills", query: [URLQueryItem(name: "sort", value: "popular")])
     }
 
+    // MARK: Automations
+    /// Never cached by the API: every call asks the crew members' engines.
+    func automations(crew: String? = nil) async throws -> AutomationList {
+        var q: [URLQueryItem] = []
+        if let crew { q.append(URLQueryItem(name: "crew", value: crew)) }
+        return try await get("automations", query: q)
+    }
+    /// Newest first.
+    func automationRuns(crew: String, id: String, limit: Int = 20) async throws -> [AutomationRun] {
+        try await get("crew/\(crew.urlPath)/automations/\(id.urlPath)/runs", query: [URLQueryItem(name: "limit", value: String(limit))])
+    }
+    /// A request, not an instant start: the engine begins on its next tick (about a minute).
+    func runAutomation(crew: String, id: String) async throws -> Automation {
+        try await post("crew/\(crew.urlPath)/automations/\(id.urlPath)/run")
+    }
+
     // MARK: Alerts
     func alerts(statuses: [String], crew: String? = nil, limit: Int = 100) async throws -> [Alert] {
         var q = statuses.map { URLQueryItem(name: "status", value: $0) }

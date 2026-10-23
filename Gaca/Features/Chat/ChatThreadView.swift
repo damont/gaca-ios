@@ -151,6 +151,7 @@ extension AppModel {
         case .today: todayPath.append(route)
         case .inbox: inboxPath.append(route)
         case .artifacts: artifactsPath.append(route)
+        case .automations: automationsPath.append(route)
         }
     }
 }

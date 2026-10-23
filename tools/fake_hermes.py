@@ -126,13 +126,25 @@ async def toolsets(_: Request) -> JSONResponse:
     ]})
 
 
+JOBS = [
+    {"id": "j1", "name": "Weekly Docker prune", "schedule": {"kind": "cron", "expr": "0 3 * * 0"}, "enabled": True,
+     "next_run_at": "2026-10-11T03:00:00+00:00", "last_status": "ok", "no_agent": True},
+    {"id": "j2", "name": "Disk check", "schedule": {"kind": "cron", "expr": "0 * * * *"}, "enabled": False,
+     "last_status": "ok"},
+]
+
+
 async def jobs(_: Request) -> JSONResponse:
-    return JSONResponse({"jobs": [
-        {"id": "j1", "name": "Weekly Docker prune", "schedule": {"kind": "cron", "expr": "0 3 * * 0"}, "enabled": True,
-         "next_run_at": "2026-10-11T03:00:00+00:00", "last_status": "ok", "no_agent": True},
-        {"id": "j2", "name": "Disk check", "schedule": {"kind": "cron", "expr": "0 * * * *"}, "enabled": False,
-         "last_status": "ok"},
-    ]})
+    return JSONResponse({"jobs": JOBS})
+
+
+async def job(request: Request) -> JSONResponse:
+    found = next((j for j in JOBS if j["id"] == request.path_params["job_id"]), None)
+    return JSONResponse({"job": found}) if found else JSONResponse({"error": "not found"}, status_code=404)
+
+
+async def run_job(request: Request) -> JSONResponse:
+    return JSONResponse({"ok": True})
 
 
 app = Starlette(routes=[
@@ -144,6 +156,8 @@ app = Starlette(routes=[
     Route("/health/detailed", health),
     Route("/api/model/options", model_options),
     Route("/api/jobs", jobs),
+    Route("/api/jobs/{job_id}", job),
+    Route("/api/jobs/{job_id}/run", run_job, methods=["POST"]),
 ])
 
 if __name__ == "__main__":

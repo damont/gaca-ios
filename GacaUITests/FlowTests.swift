@@ -42,8 +42,8 @@ final class FlowTests: XCTestCase {
         shot("08-typing-done-in-nav-bar")
         app.buttons["composer.done"].tap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5), "Done puts the keyboard away")
-        app.tabBars.buttons["Inbox"].tap()
-        XCTAssertTrue(app.navigationBars["Inbox"].waitForExistence(timeout: 5), "tab bar reachable again")
+        app.tabBars.buttons["Alerts"].tap()
+        XCTAssertTrue(app.navigationBars["Alerts"].waitForExistence(timeout: 5), "tab bar reachable again")
     }
 
     func testNewChatStreamsReplyWithActivityAndPageCard() {
@@ -95,7 +95,7 @@ final class FlowTests: XCTestCase {
     }
 
     func testAlertToChatAndTriage() {
-        app.tabBars.buttons["Inbox"].tap()
+        app.tabBars.buttons["Alerts"].tap()
         let alert = app.staticTexts["Disk usage on gaca-pi is at 92%"]
         XCTAssertTrue(alert.waitForExistence(timeout: 10))
         shot("08-inbox")
@@ -117,7 +117,7 @@ final class FlowTests: XCTestCase {
     }
 
     func testSwipeToHandleAlert() {
-        app.tabBars.buttons["Inbox"].tap()
+        app.tabBars.buttons["Alerts"].tap()
         let row = app.staticTexts["Nightly backup finished"]
         XCTAssertTrue(row.waitForExistence(timeout: 10))
         row.swipeRight()
@@ -128,8 +128,8 @@ final class FlowTests: XCTestCase {
     }
 
     func testDelegationTodaySkillsAndCrew() {
-        // New delegation from the Inbox.
-        app.tabBars.buttons["Inbox"].tap()
+        // New delegation from Alerts.
+        app.tabBars.buttons["Alerts"].tap()
         app.buttons["Start a delegation"].tap()
         let text = app.textViews.firstMatch.exists ? app.textViews.firstMatch : app.textFields["What should your crew do?"]
         XCTAssertTrue(text.waitForExistence(timeout: 5))
@@ -191,5 +191,20 @@ final class FlowTests: XCTestCase {
         // The page's data call went through the API bridge and came back.
         XCTAssertTrue(app.webViews.staticTexts["count: 1"].waitForExistence(timeout: 10), "window.app bridge round-trip")
         shot("18-artifact-bridge")
+    }
+
+    func testAutomationsTabAndRunNow() {
+        // Automations come live from each crew member's (fake) Hermes, every crew member at once.
+        app.tabBars.buttons["Automations"].tap()
+        let job = element(containing: "Weekly Docker prune")
+        XCTAssertTrue(job.waitForExistence(timeout: 10))
+        XCTAssertTrue(element(containing: "Paused").exists, "the disabled job reads as paused")
+        shot("19-automations")
+        job.tap()
+        let runNow = app.buttons["Run now"]
+        XCTAssertTrue(runNow.waitForExistence(timeout: 10))
+        runNow.tap()
+        XCTAssertTrue(element(containing: "Requested.").waitForExistence(timeout: 10))
+        shot("20-automation-detail")
     }
 }
