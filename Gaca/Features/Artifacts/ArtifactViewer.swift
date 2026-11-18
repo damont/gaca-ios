@@ -20,6 +20,8 @@ struct ArtifactViewer: View {
     @State private var confirmDelete = false
     /// The chat made for this page the first time it asked (see `ask`).
     @State private var askedSessionId: String?
+    @State private var sharing: Artifact?
+    @State private var publishing: Artifact?
 
     var body: some View {
         ZStack {
@@ -54,13 +56,22 @@ struct ArtifactViewer: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button("Reload", systemImage: "arrow.clockwise") { Task { await load() } }
-                    Button("Archive", systemImage: "archivebox") {
-                        Task {
-                            _ = try? await model.api.patchArtifact(artifactId, ArtifactPatch(archived: true))
-                            dismiss()
-                        }
+                    if let artifact, artifact.canShare {
+                        Button("Share…", systemImage: "person.crop.circle.badge.plus") { sharing = artifact }
                     }
-                    Button("Delete…", systemImage: "trash", role: .destructive) { confirmDelete = true }
+                    if let artifact, artifact.canPublish {
+                        Button(artifact.publishedId != nil ? "Publish new version…" : "Publish…", systemImage: "globe") { publishing = artifact }
+                    }
+                    // Only the owner may archive or delete: the cloud refuses both to everyone else.
+                    if artifact?.canManage ?? true {
+                        Button("Archive", systemImage: "archivebox") {
+                            Task {
+                                _ = try? await model.api.patchArtifact(artifactId, ArtifactPatch(archived: true))
+                                dismiss()
+                            }
+                        }
+                        Button("Delete…", systemImage: "trash", role: .destructive) { confirmDelete = true }
+                    }
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -78,6 +89,8 @@ struct ArtifactViewer: View {
         } message: {
             Text("The page and everything it stored will be gone for good. Archive it instead to just tidy it away.")
         }
+        .sheet(item: $sharing, onDismiss: { Task { if let a = try? await model.api.artifact(artifactId) { artifact = a } } }) { ShareSheet(artifact: $0) }
+        .sheet(item: $publishing, onDismiss: { Task { if let a = try? await model.api.artifact(artifactId) { artifact = a } } }) { PublishSheet(artifact: $0) }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { resumeToken += 1 }
         }

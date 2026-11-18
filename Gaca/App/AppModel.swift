@@ -25,6 +25,9 @@ final class AppModel {
     var visibleSessionId: String?
     /// A `gaca://setup` link that arrived (tapped or scanned elsewhere) for the pairing screen.
     var pendingSetupLink: SetupLink?
+    /// A `gaca://join/<token>` link waiting for the Join screen to read it. Held in memory only (never in a route,
+    /// so never in a navigation path or a log), and only acted on once this phone is paired.
+    var pendingJoinLink: String?
     /// The device's APNs token once iOS hands it over; registered with the API on sign-in.
     var pushToken: String?
     /// The crew as last fetched from the API — read by every screen that colors things by
@@ -131,6 +134,7 @@ final class AppModel {
         crew = []
         inboxCount = 0
         chatPath = []; todayPath = []; inboxPath = []; artifactsPath = []; automationsPath = []
+        pendingJoinLink = nil
     }
 
     func didReceivePushToken(_ token: String) async {
@@ -165,6 +169,14 @@ final class AppModel {
         artifactsPath = [.artifact(id)]
     }
 
+    /// Opens "Add a shared page" for a waiting `gaca://join/<token>` link, once signed in. Called again when the
+    /// tabs appear, so a link that arrived before sign-in finished is not lost.
+    func routePendingJoin() {
+        guard pendingJoinLink != nil, case .signedIn = auth else { return }
+        tab = .artifacts
+        if artifactsPath.last != .join { artifactsPath = [.join] }
+    }
+
     func handle(url: URL) {
         // gaca://setup?url=…&code=… pairs (only while unpaired — a stray link must not
         // silently move a paired phone to another server).
@@ -174,6 +186,13 @@ final class AppModel {
         }
         // gaca://artifact/<id>, gaca://alert/<id>, gaca://session/<id>
         guard url.scheme == "gaca", let host = url.host() else { return }
+        // gaca://join/<token>: a shared page's invite. The Join screen shows what it is before anything is added.
+        if host == "join" {
+            guard parseInviteToken(url.absoluteString) != nil else { return }
+            pendingJoinLink = url.absoluteString
+            routePendingJoin()
+            return
+        }
         let id = url.pathComponents.dropFirst().first ?? ""
         guard !id.isEmpty else { return }
         switch host {
@@ -196,6 +215,8 @@ enum Route: Hashable {
     case crew(String)
     case automation(crew: String, id: String)
     case settings
+    /// "Add a shared page". A tapped link's token travels in `AppModel.pendingJoinLink`, never in the route.
+    case join
 }
 
 enum PairingError: LocalizedError {
