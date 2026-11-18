@@ -11,17 +11,18 @@ struct InboxView: View {
     @State private var composing = false
 
     enum InboxTab: String, CaseIterable, Identifiable {
-        case attention = "Attention", snoozed = "Snoozed", delegated = "Delegated", history = "History"
+        case attention = "Needs attention", history = "History"
         var id: String { rawValue }
+        /// `new` is the only open status: whatever is mid-run or waiting on you is still open. History is every
+        /// way an alert can end (done by Hermes, by you, good to know, not useful).
         var statuses: [String] {
             switch self {
-            case .attention: return ["new", "completed"]
-            case .snoozed: return ["snoozed"]
-            case .delegated: return ["delegated"]
-            case .history: return ["acted", "dismissed"]
+            case .attention: return ["new"]
+            case .history: return ["done_by_gaca", "done_by_me", "noted", "not_useful"]
             }
         }
-        var swipeable: Bool { self == .attention || self == .snoozed }
+        /// Only open alerts can be swiped away: left = not useful, right = I handled it.
+        var swipeable: Bool { self == .attention }
     }
 
     var body: some View {
@@ -133,7 +134,7 @@ struct InboxView: View {
         withAnimation { alerts.removeAll { $0.id == alert.id } }
         Task {
             do {
-                _ = act ? try await model.api.act(alert.id, note: nil) : try await model.api.dismiss(alert.id, note: nil)
+                _ = try await model.api.closeAlert(alert.id, reason: act ? "done_by_me" : "not_useful")
             } catch {
                 self.error = error.localizedDescription
             }

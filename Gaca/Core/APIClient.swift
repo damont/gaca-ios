@@ -3,15 +3,31 @@ import Foundation
 /// What went wrong talking to gaca-api, in words a screen can show as-is.
 enum APIError: LocalizedError, Equatable {
     case unauthorized
-    case http(status: Int, detail: String?)
+    /// `code` and `info` are the structured part of newer errors (cloud routes, and answers passed through from
+    /// the cloud): a stable machine word such as `cloud_not_configured`, and numbers or reasons. Older routes have neither.
+    case http(status: Int, detail: String?, code: String? = nil, info: [String: JSONValue]? = nil)
     case network(String)
     case decoding(String)
+
+    /// The HTTP status when the server answered with an error, else nil.
+    var status: Int? { if case .http(let s, _, _, _) = self { return s } else { return nil } }
+    /// The server's stable error code (e.g. `cloud_artifacts_present`), when it sent one.
+    var code: String? { if case .http(_, _, let c, _) = self { return c } else { return nil } }
+    /// A whole-number field of the error's `info`, or nil.
+    func infoInt(_ key: String) -> Int? {
+        guard case .http(_, _, _, let info?) = self else { return nil }
+        switch info[key] {
+        case .number(let n)?: return Int(n)
+        case .string(let s)?: return Int(s)
+        default: return nil
+        }
+    }
 
     var errorDescription: String? {
         switch self {
         case .unauthorized: return "Your session expired — sign in again."
-        case .http(_, let detail?): return detail
-        case .http(let status, nil): return "The server answered \(status)."
+        case .http(_, let detail?, _, _): return detail
+        case .http(let status, nil, _, _): return "The server answered \(status)."
         case .network(let message): return message
         case .decoding: return "The server sent something this app couldn't read."
         }
@@ -85,9 +101,25 @@ final class APIClient: @unchecked Sendable {
         }
     }
 
-    func sendVoid(_ method: String, _ path: String, json: (any Encodable)? = nil) async throws {
+    func sendVoid(_ method: String, _ path: String, query: [URLQueryItem] = [], json: (any Encodable)? = nil) async throws {
         let body = try json.map { try Self.encoder.encode($0) }
-        _ = try await perform(request(method, path, body: body))
+        _ = try await perform(request(method, path, query: query, body: body))
+    }
+
+    /// For the few calls that block on the server while it works (moving a page to the cloud uploads it, then checks
+    /// the copy). URLSession's default gives up after 60 seconds of silence; these wait up to five minutes.
+    func sendLong<T: Decodable>(_ method: String, _ path: String, json: (any Encodable)? = nil, as: T.Type = T.self) async throws -> T {
+        let body = try json.map { try Self.encoder.encode($0) } ?? Self.encoder.encode(EmptyBody())
+        var req = request(method, path, body: body)
+        req.timeoutInterval = 300
+        let data = try await perform(req)
+        do { return try Self.decoder.decode(T.self, from: data) } catch { throw APIError.decoding(String(describing: error)) }
+    }
+
+    /// A request whose body is already JSON (e.g. one that must carry an explicit null).
+    func sendRaw<T: Decodable>(_ method: String, _ path: String, body: Data, as: T.Type = T.self) async throws -> T {
+        let data = try await perform(request(method, path, body: body))
+        do { return try Self.decoder.decode(T.self, from: data) } catch { throw APIError.decoding(String(describing: error)) }
     }
 
     func get<T: Decodable>(_ path: String, query: [URLQueryItem] = [], as: T.Type = T.self) async throws -> T {
@@ -122,6 +154,8 @@ final class APIClient: @unchecked Sendable {
             (data, response) = try await session.data(for: req)
         } catch let error as URLError where error.code == .cancelled {
             throw CancellationError()
+        } catch let error as URLError where error.code == .timedOut {
+            throw APIError.network("The server took too long to answer. Check your connection.")
         } catch {
             throw APIError.network("Couldn't reach the server. Check your connection.")
         }
@@ -131,17 +165,27 @@ final class APIClient: @unchecked Sendable {
             throw APIError.unauthorized
         }
         guard (200..<300).contains(http.statusCode) else {
-            throw APIError.http(status: http.statusCode, detail: Self.detail(from: data))
+            let (code, info) = Self.structured(from: data)
+            throw APIError.http(status: http.statusCode, detail: Self.detail(from: data), code: code, info: info)
         }
         return data
     }
 
-    /// FastAPI errors carry `{"detail": "..."}` (or a list of validation errors).
+    /// FastAPI errors carry `{"detail": "..."}` (or a list of validation errors); newer ones also `message`.
     static func detail(from data: Data) -> String? {
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+        if let s = obj["message"] as? String, !s.isEmpty { return s }
         if let s = obj["detail"] as? String { return s }
         if let list = obj["detail"] as? [[String: Any]], let first = list.first?["msg"] as? String { return first }
         return nil
+    }
+
+    /// `code` and `info` from `{"code": "...", "info": {...}}`. Never throws: anything unreadable gives nils.
+    /// (Decoded without the snake_case key strategy, so `info` keys stay as the server wrote them.)
+    static func structured(from data: Data) -> (String?, [String: JSONValue]?) {
+        struct Body: Decodable { let code: String?; let info: [String: JSONValue]? }
+        guard let body = try? JSONDecoder().decode(Body.self, from: data) else { return (nil, nil) }
+        return (body.code, body.info)
     }
 }
 

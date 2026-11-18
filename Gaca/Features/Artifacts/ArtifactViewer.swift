@@ -122,7 +122,7 @@ struct ArtifactViewer: View {
                 let data = try await model.api.artifactCall(artifactId, method: call.method, args: call.argsJSON)
                 let body = String(decoding: data, as: UTF8.self)
                 return .ok(body.isEmpty ? "null" : body)
-            } catch APIError.http(let status, let detail) {
+            } catch APIError.http(let status, let detail, _, _) {
                 return .failure(status: status, message: detail ?? "request failed (\(status))")
             } catch {
                 return .failure(status: 0, message: error.localizedDescription)

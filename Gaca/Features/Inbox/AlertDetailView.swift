@@ -27,20 +27,6 @@ struct AlertDetailView: View {
         .background(Palette.page)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .toolbar {
-            if let alert, ["new", "completed", "snoozed"].contains(alert.effectiveStatus) {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button("1 hour") { snooze(hours: 1) }
-                        Button("3 hours") { snooze(hours: 3) }
-                        Button("Tomorrow, 9am") { snoozeTomorrow() }
-                    } label: {
-                        Label("Snooze", systemImage: "alarm")
-                            .labelStyle(.titleAndIcon)
-                    }
-                }
-            }
-        }
         .task { await load() }
     }
 
@@ -133,7 +119,7 @@ struct AlertDetailView: View {
                     .background(RoundedRectangle(cornerRadius: 14).fill(Palette.surface))
                 }
 
-                if let actions = alert.suggestedActions, !actions.isEmpty, open {
+                if let actions = alert.actions, !actions.isEmpty, open {
                     VStack(alignment: .leading, spacing: 8) {
                         SectionLabel(text: "Hermes suggests").padding(.horizontal, 2)
                         ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
@@ -250,27 +236,7 @@ struct AlertDetailView: View {
     private func resolve(act: Bool) {
         let text = note.trimmingCharacters(in: .whitespacesAndNewlines)
         run {
-            _ = act ? try await model.api.act(alertId, note: text.isEmpty ? nil : text)
-                    : try await model.api.dismiss(alertId, note: text.isEmpty ? nil : text)
-            await model.refreshInboxCount()
-            dismiss()
-        }
-    }
-
-    private func snooze(hours: Int) {
-        run {
-            _ = try await model.api.snooze(alertId, until: Date.now.addingTimeInterval(TimeInterval(hours * 3600)))
-            await model.refreshInboxCount()
-            dismiss()
-        }
-    }
-
-    private func snoozeTomorrow() {
-        let cal = Calendar.current
-        let tomorrow = cal.date(byAdding: .day, value: 1, to: cal.startOfDay(for: .now))!
-        let nine = cal.date(bySettingHour: 9, minute: 0, second: 0, of: tomorrow)!
-        run {
-            _ = try await model.api.snooze(alertId, until: nine)
+            _ = try await model.api.closeAlert(alertId, reason: act ? "done_by_me" : "not_useful", note: text.isEmpty ? nil : text)
             await model.refreshInboxCount()
             dismiss()
         }

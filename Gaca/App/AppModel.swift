@@ -53,7 +53,7 @@ final class AppModel {
     var inboxCount = 0
 
     func refreshInboxCount() async {
-        if let alerts = try? await api.alerts(statuses: ["new", "completed"]) { inboxCount = alerts.count }
+        if let alerts = try? await api.alerts(statuses: ["new"]) { inboxCount = alerts.count }
     }
 
     var defaultCrew: CrewMember? { crew.first(where: \.isDefault) ?? crew.first }

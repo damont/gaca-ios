@@ -124,6 +124,9 @@ struct SuggestedAction: Codable, Sendable, Hashable {
 struct AlertLink: Decodable, Sendable, Hashable {
     let url: String
     let label: String?
+
+    var isWeb: Bool { url.lowercased().hasPrefix("https://") || url.lowercased().hasPrefix("http://") }
+    var title: String { label ?? url }
 }
 
 struct Alert: Decodable, Sendable, Identifiable, Hashable {
@@ -136,18 +139,35 @@ struct Alert: Decodable, Sendable, Identifiable, Hashable {
     let title: String
     let body: String?
     let data: JSONValue?
-    let suggestedActions: [SuggestedAction]?
     let links: [AlertLink]?
     let artifactId: String?
+    /// `new` while open; otherwise how it ended: done_by_gaca / done_by_me / noted / not_useful.
     let status: String
     let effectiveStatus: String
-    let snoozeUntil: Date?
+    /// When `status` last changed — the time to show next to "Done by Hermes".
+    let statusChangedAt: Date?
     let sessionId: String?
     let resolutionNote: String?
     /// Key/value rows to show for `data`, flattened by the API.
     let dataRows: [DataRow]?
     /// The page made for this alert, resolved by the API.
     let artifact: ArtifactRef?
+    /// The actions with their state and results. Every field is the API's decision; the app shows it and posts the tap.
+    let actions: [AlertAction]?
+    /// How the alert's screen lays out, decided by the API so every app behaves the same.
+    let workflow: AlertWorkflow?
+    /// The latest email draft, if an agent wrote one.
+    let draft: AlertDraft?
+    /// True when the crew member it names was removed: read-only history now. Absent on older servers.
+    let crewRemoved: Bool?
+    let parentAlertId: String?
+
+    var isOpen: Bool { status == "new" }
+    var isCrewRemoved: Bool { crewRemoved ?? false }
+    var actionList: [AlertAction] { actions ?? [] }
+    var flow: AlertWorkflow { workflow ?? AlertWorkflow() }
+    /// Only web addresses ever become tappable, whatever the server says.
+    var webLinks: [AlertLink] { (links ?? []).filter(\.isWeb) }
 
     struct DataRow: Decodable, Sendable, Hashable {
         let key: String
@@ -155,9 +175,84 @@ struct Alert: Decodable, Sendable, Identifiable, Hashable {
     }
 }
 
+/// An email draft an agent wrote. The API built `mailto` and `copyText`; the app only opens or copies them.
+struct AlertDraft: Decodable, Sendable, Hashable {
+    let to: String?
+    let subject: String?
+    let body: String
+    let copyText: String?
+    let mailto: String?
+
+    var textToCopy: String { copyText ?? body }
+}
+
+/// What an action did once it ran: the agent's short answer, links it gave, or a draft it wrote.
+struct ActionResult: Decodable, Sendable, Hashable {
+    let summary: String?
+    let links: [AlertLink]?
+    let draft: AlertDraft?
+    let error: String?
+}
+
+/// One tappable action and where it stands — `state` is idle / running / done / failed.
+struct AlertAction: Decodable, Sendable, Hashable, Identifiable {
+    let index: Int
+    let kind: String?
+    let label: String
+    let detail: String?
+    /// The word on the button: "Add", "Draft", "Do it".
+    let cta: String?
+    /// An "Add all"-style action: shown as the one big button, not as a row.
+    let prominent: Bool?
+    /// Where it stands while running ("Hermes is on it").
+    let note: String?
+    let state: String?
+    let canRun: Bool?
+    let result: ActionResult?
+
+    var id: Int { index }
+    var button: String { cta ?? "Do it" }
+    var isProminent: Bool { prominent ?? false }
+    var runState: String { state ?? "idle" }
+    var runnable: Bool { canRun ?? false }
+}
+
+struct CloseOption: Decodable, Sendable, Hashable {
+    let reason: String
+    let label: String
+    let primary: Bool?
+}
+
+struct ChatEntry: Decodable, Sendable, Hashable {
+    var hint: String? = nil
+    var prominent: Bool? = nil
+}
+
+/// The layout decisions for an alert's screen. `phase`: open / working / waiting_on_you / closed.
+struct AlertWorkflow: Decodable, Sendable, Hashable {
+    var phase: String? = nil
+    var phaseLabel: String? = nil
+    var actionsHeading: String? = nil
+    var progressLabel: String? = nil
+    var chat: ChatEntry? = nil
+    var closeHeading: String? = nil
+    var closeOptions: [CloseOption]? = nil
+    var closeHint: String? = nil
+    var closedNote: String? = nil
+
+    var currentPhase: String { phase ?? "open" }
+    var chatHint: String { chat?.hint ?? "" }
+    var chatProminent: Bool { chat?.prominent ?? false }
+    var closeChoices: [CloseOption] { closeOptions ?? [] }
+}
+
 struct AlertList: Decodable, Sendable { let alerts: [Alert] }
-struct AlertResolve: Encodable { var note: String? = nil }
-struct AlertSnooze: Encodable { let until: Date }
+/// POST /alerts/{id}/close — `reason` is one the API offered in `workflow.close_options`
+/// (done_by_me / noted / not_useful; done_by_gaca is set by the server only).
+struct AlertClose: Encodable {
+    let reason: String
+    var note: String? = nil
+}
 struct AlertTakeToChat: Encodable {
     var suggestedActionIndex: Int? = nil
     var crew: String? = nil
@@ -193,8 +288,11 @@ struct Session: Decodable, Sendable, Identifiable, Hashable {
     let preview: String?
     /// When the chat last saw a message — what the list shows as "2m".
     let lastActivityAt: Date?
+    /// True when `crew` was removed: the chat is read-only history. Absent on older servers.
+    var crewRemoved: Bool? = nil
 
     var activityDate: Date { lastActivityAt ?? createdAt }
+    var isCrewRemoved: Bool { crewRemoved ?? false }
 }
 
 struct SessionList: Decodable, Sendable { let sessions: [Session] }
@@ -208,6 +306,7 @@ struct SessionDetail: Decodable, Sendable {
     let alertId: String?
     let summary: String?
     let preview: String?
+    var crewRemoved: Bool? = nil
     let messages: [Message]
     /// A run is in flight right now (newer servers only).
     let running: Bool?
@@ -215,6 +314,8 @@ struct SessionDetail: Decodable, Sendable {
     /// Send this as Last-Event-ID when opening the event stream: it replays exactly the
     /// in-flight run's events and nothing older (newer servers only).
     let resumeSeq: Int?
+
+    var isCrewRemoved: Bool { crewRemoved ?? false }
 }
 
 struct Attachment: Decodable, Sendable, Hashable, Identifiable {
@@ -250,6 +351,8 @@ struct Message: Decodable, Sendable, Identifiable, Hashable {
     let displayContent: String?
     let artifacts: [ArtifactRef]?
     let activity: MessageActivity?
+    /// An email draft the agent wrote in this reply; `displayContent` is then only the words before it.
+    var draft: AlertDraft? = nil
 
     var isUser: Bool { role == "user" }
     var text: String { displayContent ?? content }
@@ -306,9 +409,26 @@ struct Artifact: Decodable, Sendable, Identifiable, Hashable {
     let rev: Int
     let updatedAt: Date
     let lastOpenedAt: Date?
+    // Cloud-aware fields (servers before Part 8 omit them: a local page you own).
+    /// `local` (on your server) or `cloud`.
+    var home: String? = nil
+    /// Your role on it: owner, maintainer, editor or viewer.
+    var role: String? = nil
+    /// The owner's handle when it is not you.
+    var sharedBy: String? = nil
+    var memberCount: Int? = nil
+    /// True while it is being moved to the cloud (read-only until that ends).
+    var moving: Bool? = nil
+    var cloudStatus: String? = nil
+    /// Set once this page has been published to the gallery.
+    var publishedTemplateId: String? = nil
 }
 
-struct ArtifactList: Decodable, Sendable { let artifacts: [Artifact] }
+struct ArtifactList: Decodable, Sendable {
+    let artifacts: [Artifact]
+    /// True when the cloud could not be asked and the cloud rows are from the server's last look.
+    var stale: Bool? = nil
+}
 struct ArtifactOrder: Encodable { let ids: [String] }
 struct ArtifactPatch: Encodable {
     var title: String? = nil
