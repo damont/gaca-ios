@@ -104,13 +104,15 @@ final class FlowTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["used"].exists, "data rows from the API")
         shot("09-alert-detail")
 
-        // Take it to chat: lands in the thread with a draft, alert card pinned on top.
-        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Chat with'")).firstMatch.tap()
+        // Take it to chat: lands in the thread with the alert card pinned on top. Nothing is drafted any more:
+        // the chat itself carries the alert as context.
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Chat about this'")).firstMatch.tap()
         let field = app.textFields["composer.field"]
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'URGENT ALERT'")).firstMatch.waitForExistence(timeout: 10))
-        XCTAssertFalse((field.value as? String ?? "").isEmpty, "draft prefilled by the API")
-        shot("10-alert-chat-draft")
+        field.tap()
+        field.typeText("Prune old Docker images, please")
+        shot("10-alert-chat")
         app.buttons["composer.send"].tap()
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label CONTAINS 'Used web_search'")).firstMatch.waitForExistence(timeout: 30))
         shot("11-alert-chat-reply")
