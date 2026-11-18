@@ -137,7 +137,8 @@ final class FlowTests: XCTestCase {
         text.typeText("Watch flight prices to Lisbon")
         shot("12-delegation")
         app.buttons["Start"].tap()
-        app.buttons["Delegated"].tap()
+        // A delegation is an open alert now (there is no Delegated tab): it shows under Needs attention.
+        app.buttons["Needs attention"].tap()
         XCTAssertTrue(app.staticTexts["Watch flight prices to Lisbon"].waitForExistence(timeout: 10))
 
         // Today shows the seeded briefing.
