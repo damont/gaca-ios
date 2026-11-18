@@ -10,6 +10,8 @@ struct SettingsView: View {
     @State private var removing: CrewMember?
     @State private var changingHost = false
     @State private var newHost = ""
+    @State private var heartbeat = HeartbeatModel()
+    @State private var cloud = CloudLinkModel()
 
     var body: some View {
         List {
@@ -69,7 +71,7 @@ struct SettingsView: View {
                             }
                         }
                         .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) { removing = member } label: { Label("Remove", systemImage: "trash") }
+                            Button(role: .destructive) { removing = member } label: { Label(model.canCreateCrew ? "Delete" : "Remove", systemImage: "trash") }
                             Button { editing = member } label: { Label("Edit", systemImage: "pencil") }.tint(Color(hex: "#7A838C"))
                         }
                         .swipeActions(edge: .leading) {
@@ -89,12 +91,19 @@ struct SettingsView: View {
                 } header: {
                     SectionLabel(text: "Your crew")
                 } footer: {
-                    Text("Swipe a crew member to make it the default, edit or remove it.")
+                    Text(model.canCreateCrew
+                         ? "Swipe a crew member to make it the default, edit or delete it."
+                         : "Swipe a crew member to make it the default, edit or remove it.")
                 }
             }
 
             if let error {
                 Section { ErrorLine(text: error) }
+            }
+
+            if agent?.connected == true {
+                CloudLinkSection(cloud: cloud)
+                HeartbeatSection(heartbeat: heartbeat)
             }
 
             Section {
@@ -122,14 +131,16 @@ struct SettingsView: View {
         .toolbar(.hidden, for: .tabBar)
         .sheet(isPresented: $adding) { AddCrewSheet() }
         .sheet(item: $editing) { member in EditCrewSheet(member: member) }
-        .confirmationDialog(removing.map { "Remove \(crewDisplayName($0.name))?" } ?? "",
+        .confirmationDialog(removePrompt?.title ?? "",
                             isPresented: Binding(get: { removing != nil }, set: { if !$0 { removing = nil } }),
-                            titleVisibility: .visible) {
-            Button("Remove", role: .destructive) {
-                if let member = removing { crewAction { try await model.api.removeCrewMember(member.name) } }
+                            titleVisibility: .visible,
+                            presenting: removing) { member in
+            Button(removePrompt?.confirm ?? "Remove", role: .destructive) {
+                crewAction { try await model.api.removeCrewMember(member.name) }
             }
-        } message: {
-            Text("Its chats stay, but you won't be able to talk to it until it's added again.")
+            Button("Cancel", role: .cancel) {}
+        } message: { _ in
+            Text(removePrompt?.body ?? "")
         }
         .alert("Move agent", isPresented: $changingHost) {
             TextField("Host", text: $newHost).textInputAutocapitalization(.never).autocorrectionDisabled()
@@ -145,9 +156,18 @@ struct SettingsView: View {
             Text("This iPhone stops receiving alerts and chats until you pair it again.")
         }
         .task { await load() }
+        .onDisappear { cloud.stop() }
+    }
+
+    /// The words on the remove confirmation: when gaca-api can reach the Hermes box, removing deletes the profile there.
+    private var removePrompt: RemoveCrewPrompt? {
+        removing.map { removeCrewPrompt(crewDisplayName($0.name), deletesProfile: model.canCreateCrew) }
     }
 
     private func load() async {
+        async let heartbeatLoad: Void = heartbeat.load(model.api)
+        async let cloudLoad: Void = cloud.load(model.api)
+        _ = await (heartbeatLoad, cloudLoad)
         do {
             agent = try await model.api.agentStatus()
             try await model.refreshCrew()
