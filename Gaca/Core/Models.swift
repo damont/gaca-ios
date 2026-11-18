@@ -143,7 +143,7 @@ struct Alert: Decodable, Sendable, Identifiable, Hashable {
     let artifactId: String?
     /// `new` while open; otherwise how it ended: done_by_gaca / done_by_me / noted / not_useful.
     let status: String
-    let effectiveStatus: String
+    let effectiveStatus: String?
     /// When `status` last changed — the time to show next to "Done by Hermes".
     let statusChangedAt: Date?
     let sessionId: String?
