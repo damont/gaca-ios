@@ -34,6 +34,7 @@
 		98E291857E9C6974952497C1 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15814B6FF1EA73DC5C909350 /* AppModel.swift */; };
 		9BEFAE9A0B80050EA05BF0A7 /* AddCrewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */; };
 		A166C8ECAEA361E5D2FB91E5 /* ChatThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726E274535B5E73C12974AFF /* ChatThreadView.swift */; };
+		A33597B6EB21D7748296BD99 /* DraftCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC57BB533B90D646368465FA /* DraftCard.swift */; };
 		B218187B2BA83E792D3795DF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A11879DA6029BD3D1B0B2D /* Components.swift */; };
 		C1A0F7DF2713244325F96AD5 /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D6D08E198F6EFF019D5AC /* Sharing.swift */; };
 		CF53FB20332533C737167014 /* ServerAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBFE84AE8CB29B063EED2DB /* ServerAddress.swift */; };
@@ -99,6 +100,7 @@
 		9ED1D24BA0242A7D72544B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0909B157AB28A9183485344 /* Push.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Push.entitlements; sourceTree = "<group>"; };
 		AB2121CFE0B08E5F9EB632DA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		AC57BB533B90D646368465FA /* DraftCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftCard.swift; sourceTree = "<group>"; };
 		B391DEAED1ADBC16D75D2391 /* AddCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCrewSheet.swift; sourceTree = "<group>"; };
 		BBE0411AEBE000DA22C614C9 /* Gaca.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Gaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B650D4F20D628285741E2B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				C2A11879DA6029BD3D1B0B2D /* Components.swift */,
+				AC57BB533B90D646368465FA /* DraftCard.swift */,
 				354AA773A44C1C71DDDBDBBF /* Theme.swift */,
 			);
 			path = Design;
@@ -471,6 +474,7 @@
 				B218187B2BA83E792D3795DF /* Components.swift in Sources */,
 				22C8EF961DEE943A3E8CC9B5 /* Composer.swift in Sources */,
 				8DAF3995256BEC3E73BFB9C6 /* CrewDetailView.swift in Sources */,
+				A33597B6EB21D7748296BD99 /* DraftCard.swift in Sources */,
 				5C4253309DC1C96FAA7DA4D4 /* EventStream.swift in Sources */,
 				6A393D7D9398F0D8AB7F6309 /* GacaAPI.swift in Sources */,
 				DD3631D67A4A17EC6985868E /* GacaApp.swift in Sources */,

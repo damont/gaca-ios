@@ -18,6 +18,8 @@ struct ChatThreadView: View {
     private var crewName: String? { model?.detail?.crew }
     private var style: CrewStyle { app.style(for: crewName) }
     private var displayName: String { crewName.map(crewDisplayName) ?? "Chat" }
+    /// The crew member was removed: the chat stays readable but can't be continued.
+    private var crewRemoved: Bool { model?.detail?.isCrewRemoved ?? false }
 
     var body: some View {
         Group {
@@ -61,8 +63,10 @@ struct ChatThreadView: View {
         } label: {
             VStack(spacing: 1) {
                 HStack(spacing: 6) {
-                    if let crewName { CrewAvatar(name: crewName, style: style, size: 22) }
-                    Text(displayName).font(.system(size: 17, weight: .semibold)).foregroundStyle(Palette.textPrimary)
+                    if let crewName { CrewAvatar(name: crewName, style: style, size: 22, muted: crewRemoved) }
+                    Text(crewName == nil ? displayName : crewLabel(displayName, removed: crewRemoved))
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(crewRemoved ? Palette.textMeta : Palette.textPrimary)
                 }
                 if let status = model?.status {
                     Text(status).font(.system(size: 12)).foregroundStyle(style.ink).lineLimit(1)
@@ -97,7 +101,7 @@ struct ChatThreadView: View {
                             if let label = DayDivider.label(for: message, previous: index > 0 ? model.messages[index - 1] : nil) {
                                 DayDivider(text: label)
                             }
-                            MessageView(message: message, crewName: crewName, style: style)
+                            MessageView(message: message, crewName: crewName, style: style, removed: crewRemoved)
                         }
                         if let pending = model.pending {
                             UserBubble(text: pending.text, localPhotos: pending.photos.map(\.thumbnail), attachments: [])
@@ -125,13 +129,23 @@ struct ChatThreadView: View {
                     if let error = model.sendError {
                         ErrorLine(text: error).padding(.horizontal, 10)
                     }
-                    Composer(text: $text, photos: $photos, placeholder: "Message \(displayName)…",
-                             style: style, sending: model.sending, skills: skills) {
-                        let t = text, p = photos
-                        let content = SkillCommand.expand(t.trimmingCharacters(in: .whitespacesAndNewlines), skills: skills)
-                        text = ""; photos = []
-                        Task {
-                            if await !model.send(text: content, photos: p) { text = t; photos = p }
+                    if crewRemoved {
+                        // A removed crew member cannot answer: say why the chat can't be continued.
+                        Text("This crew member was removed. This chat is read-only.")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Palette.textMeta)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 10).padding(.vertical, 16)
+                    } else {
+                        Composer(text: $text, photos: $photos, placeholder: "Message \(displayName)…",
+                                 style: style, sending: model.sending, skills: skills) {
+                            let t = text, p = photos
+                            let content = SkillCommand.expand(t.trimmingCharacters(in: .whitespacesAndNewlines), skills: skills)
+                            text = ""; photos = []
+                            Task {
+                                if await !model.send(text: content, photos: p) { text = t; photos = p }
+                            }
                         }
                     }
                 }
@@ -162,12 +176,13 @@ struct MessageView: View {
     let message: Message
     let crewName: String?
     let style: CrewStyle
+    var removed = false
 
     var body: some View {
         if message.isUser {
             UserBubble(text: message.text, localPhotos: [], attachments: message.attachments ?? [])
         } else {
-            AssistantTurn(message: message, crewName: crewName, style: style)
+            AssistantTurn(message: message, crewName: crewName, style: style, removed: removed)
         }
     }
 }
@@ -207,10 +222,11 @@ struct AssistantTurn: View {
     let message: Message
     let crewName: String?
     let style: CrewStyle
+    var removed = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            TurnHeader(crewName: crewName, style: style)
+            TurnHeader(crewName: crewName, style: style, removed: removed)
             if let activity = message.activity {
                 ActivitySummary(activity: activity)
             }
@@ -219,6 +235,10 @@ struct AssistantTurn: View {
                     .markdownTheme(.gaca)
                     .textSelection(.enabled)
                     .contextMenu { Button("Copy", systemImage: "doc.on.doc") { UIPasteboard.general.string = message.text } }
+            }
+            // An email the agent wrote in this reply (the API split it out): the words above, the draft as a card.
+            if let draft = message.draft {
+                DraftCard(draft: draft, title: "Draft")
             }
             ForEach(message.artifacts ?? []) { ref in
                 ArtifactCard(ref: ref, style: app.style(for: ref.crew ?? crewName)) {
@@ -233,13 +253,14 @@ struct AssistantTurn: View {
 struct TurnHeader: View {
     let crewName: String?
     let style: CrewStyle
+    var removed = false
 
     var body: some View {
         HStack(spacing: 8) {
-            if let crewName { CrewAvatar(name: crewName, style: style, size: 22) }
-            Text(crewName.map(crewDisplayName) ?? "Assistant")
+            if let crewName { CrewAvatar(name: crewName, style: style, size: 22, muted: removed) }
+            Text(crewName.map { crewLabel(crewDisplayName($0), removed: removed) } ?? "Assistant")
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(style.ink)
+                .foregroundStyle(removed ? Palette.textMeta : style.ink)
         }
         .accessibilityElement(children: .combine)
     }

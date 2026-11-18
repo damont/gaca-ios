@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Triage: what needs you, what's snoozed or delegated, and what's done.
+/// Triage: what still needs you, and the history of how alerts ended.
 struct InboxView: View {
     @Environment(AppModel.self) private var model
     @State private var tab: InboxTab = .attention
@@ -182,11 +182,12 @@ struct AlertRow: View {
                     .foregroundStyle(Color(hex: "#4F565E"))
                     .padding(.horizontal, 8).padding(.vertical, 2)
                     .background(Capsule().fill(Color.white.opacity(0.6)))
-                if let crew = alert.crew { CrewTag(name: crew, style: style) }
-                if alert.effectiveStatus == "completed" {
-                    Text("\(alert.crew.map(crewDisplayName) ?? "Hermes") replied")
+                if let crew = alert.crew { CrewTag(name: crew, style: style, removed: alert.isCrewRemoved) }
+                // What it is doing right now ("Working…", "Draft ready · waiting for you"): the API's words.
+                if alert.isOpen, let label = alert.workflow?.phaseLabel {
+                    Text(label)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color(hex: "#4F565E"))
+                        .foregroundStyle(Palette.textSecondary)
                         .padding(.horizontal, 8).padding(.vertical, 2)
                         .background(Capsule().fill(severity.dot.opacity(0.25)))
                 }

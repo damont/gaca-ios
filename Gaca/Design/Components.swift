@@ -1,35 +1,39 @@
 import SwiftUI
 
-/// A crew member's round avatar with two-letter initials.
+/// A crew member's round avatar with two-letter initials. Grey when `muted` (the member was removed):
+/// grey says "history", not "someone you can talk to".
 struct CrewAvatar: View {
     let name: String
     let style: CrewStyle
     var size: CGFloat = 36
+    var muted = false
 
     var body: some View {
         Text(crewInitials(name))
             .font(.system(size: size * 0.38, weight: .bold))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background(Circle().fill(style.color))
+            .background(Circle().fill(muted ? Palette.textMeta : style.color))
             .accessibilityHidden(true)
     }
 }
 
-/// A small pill naming a crew member, tinted in its color.
+/// A small pill naming a crew member, tinted in its color. A removed member reads "<Name> (removed)"
+/// in grey: the history stays attributable without implying they are still around.
 struct CrewTag: View {
     let name: String
     let style: CrewStyle
+    var removed = false
 
     var body: some View {
         HStack(spacing: 5) {
-            Circle().fill(style.color).frame(width: 6, height: 6)
-            Text(crewDisplayName(name))
+            if !removed { Circle().fill(style.color).frame(width: 6, height: 6) }
+            Text(crewLabel(crewDisplayName(name), removed: removed))
         }
         .font(.system(size: 12, weight: .semibold))
-        .foregroundStyle(style.ink)
+        .foregroundStyle(removed ? Palette.textMeta : style.ink)
         .padding(.horizontal, 8).padding(.vertical, 2)
-        .background(Capsule().fill(style.tint))
+        .background(Capsule().fill(removed ? Color.white.opacity(0.5) : style.tint))
     }
 }
 
