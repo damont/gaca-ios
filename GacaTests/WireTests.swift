@@ -52,12 +52,35 @@ final class WireTests: XCTestCase {
          "kind":"disk.low","severity":"urgent","title":"Disk at 92%","body":null,"data":{"used":"92%","n":3},
          "suggested_actions":[{"label":"Prune","prompt":"prune it"}],"links":[{"url":"https://x.dev","label":"Dash"}],
          "artifact_id":null,"artifact":null,"status":"new","effective_status":"new","status_changed_at":"2026-10-10T15:00:00+00:00",
-         "data_rows":[{"key":"used","value":"92%"},{"key":"n","value":"3"}]}
+         "data_rows":[{"key":"used","value":"92%"},{"key":"n","value":"3"}],"crew_removed":true,
+         "actions":[{"index":0,"kind":"chat","label":"Prune","cta":"Do it","state":"done","can_run":false,
+           "result":{"summary":"Freed 4 GB","links":[],"draft":{"to":"a@b.c","subject":"Hi","body":"Body","copy_text":"Subject: Hi -- Body","mailto":"mailto:a@b.c"}}}],
+         "workflow":{"phase":"waiting_on_you","phase_label":"Draft ready","chat":{"hint":"Ask Hermes","prominent":false},
+           "close_options":[{"reason":"done_by_me","label":"I did it","primary":true}]}}
         """
         let alert = try APIClient.decoder.decode(Alert.self, from: Data(json.utf8))
         XCTAssertEqual(alert.dataRows?.count, 2)
-        XCTAssertEqual(alert.suggestedActions?.first?.label, "Prune")
+        XCTAssertTrue(alert.isOpen)
+        XCTAssertTrue(alert.isCrewRemoved)
+        XCTAssertEqual(alert.actionList.first?.label, "Prune")
+        XCTAssertEqual(alert.actionList.first?.runState, "done")
+        XCTAssertEqual(alert.actionList.first?.result?.draft?.textToCopy, "Subject: Hi -- Body")
+        XCTAssertEqual(alert.flow.phaseLabel, "Draft ready")
+        XCTAssertEqual(alert.flow.closeChoices.first?.reason, "done_by_me")
+        XCTAssertEqual(alert.webLinks.count, 1)
         XCTAssertEqual(SeverityStyle.of(alert.severity).label, "Urgent")
+    }
+
+    func testOlderAlertWithoutWorkflowStillDecodes() throws {
+        let json = """
+        {"id":"a1","created_at":"2026-10-10T15:00:00+00:00","source":"x","kind":"k","severity":"info","title":"T",
+         "status":"noted","effective_status":"noted"}
+        """
+        let alert = try APIClient.decoder.decode(Alert.self, from: Data(json.utf8))
+        XCTAssertFalse(alert.isOpen)
+        XCTAssertFalse(alert.isCrewRemoved)
+        XCTAssertEqual(alert.flow.currentPhase, "open")
+        XCTAssertTrue(alert.actionList.isEmpty)
     }
 
     func testEncodesSnakeCase() throws {
@@ -67,6 +90,18 @@ final class WireTests: XCTestCase {
         let push = try JSONSerialization.jsonObject(with: APIClient.encoder.encode(PushTokenRegister(token: "t", platform: "ios", environment: "sandbox"))) as! [String: Any]
         XCTAssertEqual(push["platform"] as? String, "ios")
         XCTAssertEqual(push["environment"] as? String, "sandbox")
+    }
+
+    func testApiErrorStructured() {
+        let body = Data(#"{"detail":"x","code":"cloud_artifacts_present","message":"Pages live in the cloud","info":{"owned":2,"in_progress":1}}"#.utf8)
+        XCTAssertEqual(APIClient.detail(from: body), "Pages live in the cloud")
+        let (code, info) = APIClient.structured(from: body)
+        let error = APIError.http(status: 409, detail: APIClient.detail(from: body), code: code, info: info)
+        XCTAssertEqual(error.code, "cloud_artifacts_present")
+        XCTAssertEqual(error.infoInt("owned"), 2)
+        XCTAssertEqual(error.infoInt("in_progress"), 1)
+        XCTAssertNil(error.infoInt("shared"))
+        XCTAssertNil(APIClient.structured(from: Data("not json".utf8)).0)
     }
 
     func testApiErrorDetail() {

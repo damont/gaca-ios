@@ -105,7 +105,7 @@ struct TodayView: View {
         do {
             briefing = try await model.api.briefing(date: Self.wireDay.string(from: day))
             error = nil
-        } catch APIError.http(status: 404, _) {
+        } catch APIError.http(status: 404, _, _, _) {
             briefing = nil
             error = nil
         } catch is CancellationError {

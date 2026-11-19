@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Triage: what needs you, what's snoozed or delegated, and what's done.
+/// Triage: what still needs you, and the history of how alerts ended.
 struct InboxView: View {
     @Environment(AppModel.self) private var model
     @State private var tab: InboxTab = .attention
@@ -11,17 +11,18 @@ struct InboxView: View {
     @State private var composing = false
 
     enum InboxTab: String, CaseIterable, Identifiable {
-        case attention = "Attention", snoozed = "Snoozed", delegated = "Delegated", history = "History"
+        case attention = "Needs attention", history = "History"
         var id: String { rawValue }
+        /// `new` is the only open status: whatever is mid-run or waiting on you is still open. History is every
+        /// way an alert can end (done by Hermes, by you, good to know, not useful).
         var statuses: [String] {
             switch self {
-            case .attention: return ["new", "completed"]
-            case .snoozed: return ["snoozed"]
-            case .delegated: return ["delegated"]
-            case .history: return ["acted", "dismissed"]
+            case .attention: return ["new"]
+            case .history: return ["done_by_gaca", "done_by_me", "noted", "not_useful"]
             }
         }
-        var swipeable: Bool { self == .attention || self == .snoozed }
+        /// Only open alerts can be swiped away: left = not useful, right = I handled it.
+        var swipeable: Bool { self == .attention }
     }
 
     var body: some View {
@@ -133,7 +134,7 @@ struct InboxView: View {
         withAnimation { alerts.removeAll { $0.id == alert.id } }
         Task {
             do {
-                _ = act ? try await model.api.act(alert.id, note: nil) : try await model.api.dismiss(alert.id, note: nil)
+                _ = try await model.api.closeAlert(alert.id, reason: act ? "done_by_me" : "not_useful")
             } catch {
                 self.error = error.localizedDescription
             }
@@ -181,11 +182,12 @@ struct AlertRow: View {
                     .foregroundStyle(Color(hex: "#4F565E"))
                     .padding(.horizontal, 8).padding(.vertical, 2)
                     .background(Capsule().fill(Color.white.opacity(0.6)))
-                if let crew = alert.crew { CrewTag(name: crew, style: style) }
-                if alert.effectiveStatus == "completed" {
-                    Text("\(alert.crew.map(crewDisplayName) ?? "Hermes") replied")
+                if let crew = alert.crew { CrewTag(name: crew, style: style, removed: alert.isCrewRemoved) }
+                // What it is doing right now ("Working…", "Draft ready · waiting for you"): the API's words.
+                if alert.isOpen, let label = alert.workflow?.phaseLabel {
+                    Text(label)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color(hex: "#4F565E"))
+                        .foregroundStyle(Palette.textSecondary)
                         .padding(.horizontal, 8).padding(.vertical, 2)
                         .background(Capsule().fill(severity.dot.opacity(0.25)))
                 }

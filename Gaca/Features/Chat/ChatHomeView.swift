@@ -178,7 +178,7 @@ struct SessionRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            CrewAvatar(name: session.crew ?? "?", style: style, size: 40)
+            CrewAvatar(name: session.crew ?? "?", style: style, size: 40, muted: session.isCrewRemoved)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(session.summary ?? session.title ?? "New chat")
@@ -198,7 +198,8 @@ struct SessionRow: View {
                 }
                 HStack(spacing: 6) {
                     if let crew = session.crew {
-                        Text(crewDisplayName(crew)).foregroundStyle(style.ink)
+                        Text(crewLabel(crewDisplayName(crew), removed: session.isCrewRemoved))
+                            .foregroundStyle(session.isCrewRemoved ? Palette.textMeta : style.ink)
                     }
                     if session.alertId != nil {
                         Text("·").foregroundStyle(Palette.textMeta)

@@ -59,6 +59,7 @@ struct MainTabs: View {
         }
         .tint(Palette.accent)
         .task {
+            model.routePendingJoin()
             try? await model.refreshCrew()
             await model.refreshInboxCount()
         }
@@ -80,6 +81,7 @@ extension View {
             case .crew(let name): CrewDetailView(name: name)
             case .automation(let crew, let id): AutomationDetailView(crew: crew, id: id)
             case .settings: SettingsView()
+            case .join: JoinView()
             }
         }
     }
