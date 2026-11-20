@@ -101,8 +101,9 @@ struct SettingsView: View {
                 Section { ErrorLine(text: error) }
             }
 
+            // Shown whether or not Hermes is connected (as on Android): linking is between the server and the cloud.
+            CloudLinkSection(cloud: cloud)
             if agent?.connected == true {
-                CloudLinkSection(cloud: cloud)
                 HeartbeatSection(heartbeat: heartbeat)
             }
 

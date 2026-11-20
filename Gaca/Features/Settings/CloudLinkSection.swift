@@ -233,7 +233,7 @@ enum CloudLinkText {
     }
 
     static func notLinkedLine(_ status: CloudLinkStatus) -> String {
-        if !status.isConfigured { return "GACA Cloud isn't set up on this server, so linking isn't available." }
+        if !status.isConfigured { return "GACA Cloud isn't turned on for this server yet. On the server, set GACA_CLOUD_URL in its .env file and restart gaca-api, then come back here to link." }
         switch status.kind {
         case .invalid: return "The cloud no longer accepts this server's link. Link again to keep sharing."
         case .pending: return "A link was started but its code ran out. Start again to get a fresh code."
